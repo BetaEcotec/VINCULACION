@@ -1,0 +1,6 @@
+{
+  "name": "Ecotec Habilidades Blandas & IA",
+  "description": "Portal interactivo de formación práctica de la Universidad Ecotec sobre habilidades blandas, flujos financieros de reemplazo e integración de IA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
