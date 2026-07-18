@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revista Digital ECOTEC - Canales y Embajadores de Marca</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* --- BRANDING & MANUAL DE ESTILO ECOTEC --- */
+        :root {
+            --azul-institucional: #1E5FA6; /* Principal */
+            --azul-acento: #2D6DB5;        /* Franjas y secundarios */
+            --titulo-negro: #1A1A1A;       /* Títulos */
+            --cuerpo-gris: #444444;        /* Cuerpo de texto */
+            --fondo-caja: #EBF3FC;         /* Recomendaciones y Callouts */
+            --blanco: #FFFFFF;             /* Fondo absoluto */
+            --gris-claro: #F8FAFC;
+            --shadow: 0 4px 12px rgba(0,0,0,0.06);
+            --transition: all 0.25s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Calibri', 'Segoe UI', sans-serif;
+            background-color: var(--blanco);
+            color: var(--cuerpo-gris);
+            line-height: 1.6;
+            padding-bottom: 70px; /* Espacio para el footer fijo */
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--blanco);
+            border-bottom: 3px solid var(--azul-institucional);
+            padding: 20px 5%;
+        }
+
+        .header-table {
+            display: table;
+            width: 100%;
+        }
+
+        .header-cell-left {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .header-cell-right {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
+        }
+
+        .logo-ecotec {
+            height: 55px;
+            width: auto;
+        }
+
+        .tag-revista {
+            background-color: var(--azul-institucional);
+            color: var(--blanco);
+            padding: 4px 12px;
+            font-size: 10pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            color: var(--titulo-negro);
+            font-size: 22pt;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* --- INTRODUCCIÓN --- */
+        .intro-box {
+            background-color: var(--fondo-caja);
+            border-left: 6px solid var(--azul-institucional);
+            padding: 22px;
+            margin-bottom: 40px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .intro-box p {
+            font-size: 12.5pt;
+            color: var(--titulo-negro);
+            font-weight: 500;
+        }
+
+        /* --- TITULARES DE SECCIÓN --- */
+        .section-title {
+            color: var(--azul-institucional);
+            font-size: 16pt;
+            margin-top: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--fondo-caja);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* --- GRID / TABLA DE TARJETAS (4 CANALES) --- */
+        .grid-4 {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 15px;
+            margin-bottom: 35px;
+        }
+
+        .card-canal {
+            display: table-cell;
+            width: 25%;
+            background: var(--gris-claro);
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 20px;
+            vertical-align: top;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card-canal:hover {
+            transform: translateY(-4px);
+            border-color: var(--azul-acento);
+            background: var(--blanco);
+        }
+
+        .icon-container {
+            font-size: 24pt;
+            margin-bottom: 10px;
+            color: var(--azul-institucional);
+        }
+
+        .canal-title {
+            color: var(--titulo-negro);
+            font-size: 13pt;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .canal-func {
+            font-size: 10pt;
+            color: var(--cuerpo-gris);
+            margin-bottom: 15px;
+            min-height: 50px;
+        }
+
+        .funnel-badge {
+            font-size: 9pt;
+            background-color: var(--azul-institucional);
+            color: var(--blanco);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+        }
+
+        /* --- SECCIÓN REDES SOCIALES POR ROL --- */
+        .grid-3 {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 15px;
+            margin-bottom: 40px;
+        }
+
+        .card-rrss {
+            display: table-cell;
+            width: 33.33%;
+            background: var(--blanco);
+            border-top: 4px solid var(--azul-acento);
+            border-left: 1px solid #E2E8F0;
+            border-right: 1px solid #E2E8F0;
+            border-bottom: 1px solid #E2E8F0;
+            border-radius: 4px;
+            padding: 20px;
+            vertical-align: top;
+            box-shadow: var(--shadow);
+        }
+
+        .rrss-name {
+            font-size: 13pt;
+            font-weight: bold;
+            color: var(--titulo-negro);
+            margin-bottom: 10px;
+        }
+
+        /* --- FILA DE DASHBOARDS BI-COLUMNA --- */
+        .row-dashboards {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 20px;
+            margin-bottom: 45px;
+        }
+
+        .col-dash {
+            display: table-cell;
+            width: 50%;
+            vertical-align: top;
+            background: var(--blanco);
+            border: 1px solid #E2E8F0;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .dash-title {
+            font-size: 13pt;
+            color: var(--titulo-negro);
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Funnel CSS Interactivo */
+        .funnel-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .funnel-stage {
+            color: var(--blanco);
+            font-weight: bold;
+            font-size: 10.5pt;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+        .funnel-stage:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .stage-1 { width: 100%; background-color: #1E5FA6; }
+        .stage-2 { width: 85%; background-color: #2D6DB5; }
+        .stage-3 { width: 70%; background-color: #4A89D2; }
+        .stage-4 { width: 55%; background-color: #10B981; }
+
+        .funnel-feedback {
+            margin-top: 20px;
+            background-color: var(--fondo-caja);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 10pt;
+            min-height: 55px;
+            text-align: center;
+            border: 1px dashed var(--azul-institucional);
+        }
+
+        /* Comparador UI */
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 10.5pt;
+            color: var(--cuerpo-gris);
+            outline: none;
+            margin-bottom: 15px;
+        }
+
+        .btn-action {
+            display: block;
+            width: 100%;
+            background-color: var(--azul-institucional);
+            color: var(--blanco);
+            border: none;
+            padding: 11px;
+            font-size: 11pt;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+        }
+
+        .btn-action:hover {
+            background-color: var(--azul-acento);
+        }
+
+        .compare-output {
+            margin-top: 15px;
+            background-color: var(--fondo-caja);
+            border-left: 4px solid var(--azul-institucional);
+            padding: 14px;
+            border-radius: 4px;
+            font-size: 10pt;
+            min-height: 85px;
+        }
+
+        /* --- CASO DE ÉXITO MOCOKUP --- */
+        .case-container {
+            display: table;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .case-cell {
+            display: table-cell;
+            vertical-align: top;
+        }
+
+        .case-info {
+            width: 60%;
+            padding-right: 30px;
+        }
+
+        .case-mockup {
+            width: 40%;
+            background: #F1F5F9;
+            border: 12px solid #334155;
+            border-radius: 24px;
+            padding: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .mockup-header {
+            font-weight: bold;
+            font-size: 10pt;
+            border-bottom: 1px solid #CBD5E1;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            color: var(--titulo-negro);
+        }
+
+        .mockup-post {
+            background: var(--blanco);
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .mockup-img-sim {
+            background: linear-gradient(135deg, #E2E8F0, #CBD5E1);
+            height: 120px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24pt;
+            margin-bottom: 8px;
+        }
+
+        .mockup-tags {
+            font-size: 8.5pt;
+            color: var(--azul-institucional);
+            font-weight: 500;
+        }
+
+        /* --- DIAGRAMA DE FLUJO (EMBAJADORES) --- */
+        .flow-container {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 12px;
+            margin-bottom: 40px;
+        }
+
+        .flow-step {
+            display: table-cell;
+            width: 25%;
+            background: var(--gris-claro);
+            border: 1px solid #E2E8F0;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        .step-num {
+            background: var(--azul-institucional);
+            color: var(--blanco);
+            width: 26px;
+            height: 26px;
+            line-height: 26px;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            font-weight: bold;
+            font-size: 10pt;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: var(--titulo-negro);
+            font-size: 11pt;
+            margin-bottom: 5px;
+        }
+
+        /* --- CALLOUT BANNER --- */
+        .banner-callout {
+            background: linear-gradient(135deg, var(--azul-institucional), var(--azul-acento));
+            color: var(--blanco);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .banner-stat {
+            font-size: 26pt;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        /* --- COMBO INTERACTIVO CHECKBOXES --- */
+        .checkbox-group {
+            margin-bottom: 12px;
+        }
+
+        .checkbox-group label {
+            font-size: 10.5pt;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+            color: var(--titulo-negro);
+        }
+
+        .chk-item {
+            display: inline-block;
+            margin-right: 15px;
+            font-size: 10pt;
+            cursor: pointer;
+        }
+
+        /* --- FOOTER INSTITUCIONAL OBLIGATORIO --- */
+        footer {
+            background-color: var(--azul-acento);
+            color: var(--blanco);
+            padding: 15px 5%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            font-size: 9.5pt;
+            z-index: 1000;
+        }
+
+        /* RESPONSIVE FLUIDITY */
+        @media (max-width: 768px) {
+            .grid-4, .grid-3, .row-dashboards, .col-dash, .case-container, .case-cell, .flow-container, .flow-step, .card-canal, .card-rrss {
+                display: block !important;
+                width: 100% !important;
+                margin-bottom: 20px;
+            }
+            .grid-4, .grid-3, .row-dashboards, .flow-container {
+                border-spacing: 0;
+            }
+            .case-info { padding-right: 0; }
+            body { padding-bottom: 110px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ENCABEZADO INSTITUCIONAL -->
+    <header>
+        <div class="header-table">
+            <div class="header-cell-left">
+                <span class="tag-revista">Plan Estratégico de Marketing Digital</span>
+                <h1>CANALES Y EMBAJADORES DE MARCA (ESTRATEGIA DE DISTRIBUCIÓN)</h1>
+            </div>
+            <div class="header-cell-right">
+                <img src="https://vinculacion.ecotec.edu.ec/wp-content/uploads/2026/04/ecotec-site-icon-1.webp" alt="Ecotec Logo" class="logo-ecotec">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- 1. INTRODUCCIÓN BREVE -->
+        <section class="intro-box">
+            <p>Elegir con precisión quirúrgica los canales de distribución digital, en lugar de intentar abarcar todas las plataformas por igual, es el factor determinante para la supervivencia de un nuevo negocio. Concentrar los recursos y esfuerzos en los puntos de contacto correctos optimiza el presupuesto y garantiza impactos reales donde se encuentra la audiencia objetiva.</p>
+        </section>
+
+        <!-- 2. 4 CANALES CLAVE Y SU FUNCIÓN -->
+        <h2 class="section-title">4 Canales Clave y su Función</h2>
+        <div class="grid-4">
+            <div class="card-canal">
+                <div class="icon-container">🌐</div>
+                <div class="canal-title">Redes Sociales</div>
+                <div class="canal-func">Generación de alcance masivo continuo y captura estructurada de interés inicial.</div>
+                <div class="funnel-badge">Alcance / Interés</div>
+            </div>
+            <div class="card-canal">
+                <div class="icon-container">📩</div>
+                <div class="canal-title">Email Marketing</div>
+                <div class="canal-func">Conversión efectiva de oportunidades de venta y maduración del posicionamiento.</div>
+                <div class="funnel-badge">Conversión / Fidelización</div>
+            </div>
+            <div class="card-canal">
+                <div class="icon-container">🎓</div>
+                <div class="canal-title">Mkt. de Contenido</div>
+                <div class="canal-func">Construcción de visibilidad orgánica sostenida mediante creatividad educativa.</div>
+                <div class="funnel-badge">Interés / Fidelización</div>
+            </div>
+            <div class="card-canal">
+                <div class="icon-container">💳</div>
+                <div class="canal-title">Publicidad Pagada</div>
+                <div class="canal-func">Aceleración del tráfico cualificado y conversión directa hacia el cierre de ventas.</div>
+                <div class="funnel-badge">Conversión</div>
+            </div>
+        </div>
+
+        <!-- 3. REDES SOCIALES POR ROL ESTRATÉGICO -->
+        <h2 class="section-title">Redes Sociales por Rol Estratégico</h2>
+        <div class="grid-3">
+            <div class="card-rrss">
+                <div class="rrss-name">💼 LinkedIn</div>
+                <p style="font-size: 10.5pt;"><strong>Objetivo:</strong> Posicionamiento corporativo, generación de prospectos de alto valor (B2B) y networking profesional de confianza mutua entre fundadores.</p>
+            </div>
+            <div class="card-rrss">
+                <div class="rrss-name">📱 TikTok</div>
+                <p style="font-size: 10.5pt;"><strong>Objetivo:</strong> Maximizar el alcance orgánico masivo mediante micro-aprendizaje, tips rápidos y formatos dinámicos que se viralizan rápidamente.</p>
+            </div>
+            <div class="card-rrss">
+                <div class="rrss-name">📸 Instagram</div>
+                <p style="font-size: 10.5pt;"><strong>Objetivo:</strong> Servir como vitrina o portafolio visual estético y compartir el estilo de vida, valores y el "detrás de cámaras" del emprendedor.</p>
+            </div>
+        </div>
+
+        <!-- DASHBOARDS INTERACTIVOS BI-COLUMNA -->
+        <div class="row-dashboards">
+            
+            <!-- 4. DASHBOARD DINÁMICO #1: EMBUDO INTERACTIVO -->
+            <div class="col-dash">
+                <div class="dash-title">Embudo de Distribución de Canales</div>
+                <p style="font-size: 9.5pt; text-align: center; margin-bottom: 12px; color: var(--azul-institucional);">
+                    <em>Haz clic en cada etapa del embudo para ver sus canales óptimos:</em>
+                </p>
+                <div class="funnel-wrapper">
+                    <div class="funnel-stage stage-1" onclick="filtrarEmbudo('alcance')">ALCANCE</div>
+                    <div class="funnel-stage stage-2" onclick="filtrarEmbudo('interes')">INTERÉS</div>
+                    <div class="funnel-stage stage-3" onclick="filtrarEmbudo('oportunidad')">OPORTUNIDADES</div>
+                    <div class="funnel-stage stage-4" onclick="filtrarEmbudo('conversion')">CONVERSIONES</div>
+                </div>
+                <div class="funnel-feedback" id="funnelText">
+                    Selecciona una fase para auditar la efectividad de distribución.
+                </div>
+            </div>
+
+            <!-- 5. DASHBOARD DINÁMICO #2: COMPARADOR DE CANALES -->
+            <div class="col-dash">
+                <div class="dash-title">Comparador Estratégico de Canales</div>
+                <div class="form-group">
+                    <label style="font-size: 10pt; font-weight: bold; display: block; margin-bottom: 5px;" for="selectObjetivo">¿Cuál es tu objetivo de negocio prioritario?</label>
+                    <select id="selectObjetivo" class="form-control" onchange="compararObjetivos()">
+                        <option value="">-- Selecciona un objetivo estratégico --</option>
+                        <option value="ventas">Quiero más ventas</option>
+                        <option value="branding">Quiero más reconocimiento de marca</option>
+                        <option value="fidelizar">Quiero fidelizar clientes actuales</option>
+                    </select>
+                </div>
+                <div class="compare-output" id="compareResult">
+                    <em style="color: #64748B;">Elige una opción arriba para desplegar de forma automatizada los canales ideales sugeridos junto a su justificación de marketing.</em>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 6. CASO DE ÉXITO REAL -->
+        <h2 class="section-title">Caso de Éxito Real — The Smart Roll (Guayaquil)</h2>
+        <div class="case-container">
+            <div class="case-cell case-info">
+                <p style="margin-bottom: 12px; font-size: 11pt;">Nacida como una marca viral de rollos de canela impulsada por Paula Idrovo durante la pandemia, <strong>The Smart Roll</strong> ha escalado con éxito hasta inaugurar puntos físicos en enclaves clave de Guayaquil como <strong>Sports Garden, Urdesa y CC Alhambra</strong>, rebasando los 100 mil seguidores orgánicos.</p>
+                
+                <div style="background-color: var(--fondo-caja); border-left: 4px solid var(--azul-institucional); padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+                    <p style="font-size: 10pt; color: var(--titulo-negro);"><strong>El Concepto "Instagrammable":</strong> Su propuesta de valor visual está estratégicamente diseñada para que el producto sea el catalizador del marketing. El empaque y la presentación provocan que el usuario genere contenido espontáneo (UGC) en sus propias redes sin necesidad de pauta pagada.</p>
+                </div>
+
+                <p style="font-size: 10.5pt; font-weight: bold; margin-bottom: 5px;">Tácticas de distribución implementadas:</p>
+                <ul style="font-size: 10pt; padding-left: 20px; margin-bottom: 15px;">
+                    <li>Producción de contenido nativo diario en TikTok e Instagram humanizando el negocio.</li>
+                    <li>Lanzamiento mensual de sabores inéditos de temporada tratados como un evento exclusivo.</li>
+                    <li>Uso riguroso de hashtags fijos de nicho local para indexación: <em>#thesmartroll #rollosdecanela #guayaquil #emprendimiento</em>.</li>
+                </ul>
+            </div>
+            <div class="case-cell case-mockup">
+                <div class="mockup-header">📱 Vista previa de Posicionamiento</div>
+                <div class="mockup-post">
+                    <div class="mockup-img-sim">🥮</div>
+                    <p style="font-size: 9.5pt; font-weight: bold; color: var(--titulo-negro);">The Smart Roll Guayaquil</p>
+                    <p style="font-size: 9pt; color: var(--cuerpo-gris); margin-bottom: 5px;">¡El nuevo sabor del mes ya está disponible en Alhambra y Urdesa! 🚀</p>
+                    <p class="mockup-tags">#thesmartroll #rollosdecanela #guayaquil #supportsmallbusiness</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. SECCIÓN EMBAJADORES DE MARCA -->
+        <h2 class="section-title">Embajadores de Marca: Conexión Humana</h2>
+        <p style="margin-bottom: 15px; font-size: 11pt;">Los embajadores digitales (figuras reconocidas por la comunidad o creadores del nicho, como perfiles tipo "PPC") actúan como traductores de confianza: transforman las características técnicas del producto en un lenguaje cotidiano, empático y digerible para la comunidad.</p>
+        
+        <div class="flow-container">
+            <div class="flow-step">
+                <div class="step-num">1</div>
+                <div class="step-title">Review Activo</div>
+                <p style="font-size: 9.5pt; color: var(--cuerpo-gris);">El embajador muestra el producto de forma orgánica en sus historias habituales.</p>
+            </div>
+            <div class="flow-step">
+                <div class="step-num">2</div>
+                <div class="step-title">Casos de Uso</div>
+                <p style="font-size: 9.5pt; color: var(--cuerpo-gris);">Se demuestra cómo el producto resuelve un problema específico del día a día.</p>
+            </div>
+            <div class="flow-step">
+                <div class="step-num">3</div>
+                <div class="step-title">Llamado a la Acción</div>
+                <p style="font-size: 9.5pt; color: var(--cuerpo-gris);">Invitación directa a usar códigos promocionales personalizados y limitados.</p>
+            </div>
+            <div class="flow-step">
+                <div class="step-num">4</div>
+                <div class="step-title">Conversión</div>
+                <p style="font-size: 9.5pt; color: var(--cuerpo-gris);">Tráfico cualificado listo para la compra en los canales de venta digitales.</p>
+            </div>
+        </div>
+
+        <!-- 8. SECCIÓN DATO RELEVANTE (BANNER CALLOUT) -->
+        <div class="banner-callout">
+            <div class="banner-stat">84%</div>
+            <p style="font-size: 11.5pt; max-width: 850px; margin: 0 auto; font-weight: 300;">De los consumidores digitales declaran que las recomendaciones directas basadas en el contenido generado por usuarios (UGC) o reseñas de embajadores de marca confiables tienen un peso decisivo en sus intenciones de compra finales.</p>
+        </div>
+
+        <!-- 9. EJERCICIO INTERACTIVO FINAL -->
+        <h2 class="section-title">Practica tú mismo: Elige tu Combo de Canales</h2>
+        <div style="background-color: var(--gris-claro); border: 1px solid #E2E8F0; padding: 25px; border-radius: 8px; box-shadow: var(--shadow);">
+            
+            <div class="checkbox-group">
+                <label>1. Selecciona tu Tipo de Negocio:</label>
+                <div class="chk-item"><input type="radio" name="tipo_biz" id="biz_b2c" value="B2C" checked> Productos de Consumo Masivo / Alimentos (B2C)</div>
+                <div class="chk-item"><input type="radio" name="tipo_biz" id="biz_b2b" value="B2B"> Servicios Profesionales / Consultorías (B2B)</div>
+            </div>
+
+            <div class="checkbox-group" style="margin-top: 15px;">
+                <label>2. Presupuesto Mensual Disponible:</label>
+                <div class="chk-item"><input type="radio" name="p_budget" id="b_bajo" value="bajo" checked> Bajo (Inversión mínima u orgánica)</div>
+                <div class="chk-item"><input type="radio" name="p_budget" id="b_medio" value="medio"> Medio (Pauta moderada)</div>
+                <div class="chk-item"><input type="radio" name="p_budget" id="b_alto" value="alto"> Alto (Estrategia omnicanal)</div>
+            </div>
+
+            <button class="btn-action" style="width: auto; padding: 12px 35px; margin-top: 10px;" onclick="calcularCombo()">Generar Recomendación</button>
+
+            <div class="compare-output" id="comboResult" style="background-color: var(--blanco); margin-top: 20px;">
+                <em style="color: #64748B;">Configura los parámetros de tu emprendimiento para estructurar tu mezcla óptima de canales.</em>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER INSTITUCIONAL OBLIGATORIO -->
+    <footer>
+        f @universidadecotec | 📷 uecotec &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; © 2026 Universidad ECOTEC - Facultad de Ciencias Económicas y Empresariales[cite: 3]
+    </footer>
+
+    <!-- LÓGICA DE INTERACTIVIDAD (JAVASCRIPT) -->
+    <script>
+        // --- 4. CONTROL DEL EMBUDO INTERACTIVO ---
+        function filtrarEmbudo(fase) {
+            const txtBox = document.getElementById('funnelText');
+            
+            if (fase === 'alcance') {
+                txtBox.innerHTML = `<strong>Fase de Alcance:</strong> Los canales más eficientes son <strong>TikTok y Redes Sociales Orgánicas</strong>. Priorizan la viralidad y captan miradas iniciales sin fricción comercial.`;
+            } else if (fase === 'interes') {
+                txtBox.innerHTML = `<strong>Fase de Interés:</strong> El <strong>Marketing de Contenidos</strong> (blogs informativos, carruseles de Instagram) educa al usuario y lo engancha resolviendo dudas específicas.`;
+            } else if (fase === 'oportunidad') {
+                txtBox.innerHTML = `<strong>Fase de Oportunidades:</strong> El <strong>Email Marketing estructurado</strong> es ideal aquí. Permite enviar ofertas segmentadas a usuarios que ya dejaron sus datos.`;
+            } else if (fase === 'conversion') {
+                txtBox.innerHTML = `<strong>Fase de Conversión:</strong> La <strong>Publicidad Pagada (Meta Ads / Google Ads)</strong> dirigida a retargeting empuja al usuario indeciso hacia el carrito de compras final.`;
+            }
+        }
+
+        // --- 5. COMPARADOR DE CANALES ---
+        function compararObjetivos() {
+            const obj = document.getElementById('selectObjetivo').value;
+            const resBox = document.getElementById('compareResult');
+
+            if (obj === 'ventas') {
+                resBox.innerHTML = `🎯 <strong>Canales Recomendados:</strong> Publicidad Pagada (Meta/Google Ads) + Email Marketing.<br><br>
+                <strong>Justificación Técnica:</strong> La pauta segmentada intercepta intenciones calientes de compra inmediata, mientras que el email recupera carritos abandonados e incentiva transacciones directas de bases de datos existentes.`;
+            } else if (obj === 'branding') {
+                resBox.innerHTML = `🎯 <strong>Canales Recomendados:</strong> TikTok + Instagram Reels + Alianzas con Embajadores de Marca.<br><br>
+                <strong>Justificación Técnica:</strong> Los algoritmos verticales de video priorizan la distribución orgánica masiva a cuentas que no te conocen, acelerando de forma exponencial el reconocimiento público de tu identidad comercial.`;
+            } else if (obj === 'fidelizar') {
+                resBox.innerHTML = `🎯 <strong>Canales Recomendados:</strong> Email Marketing Automatizado + Marketing de Contenido Educativo.<br><br>
+                <strong>Justificación Técnica:</strong> Mantener una comunicación cercana con boletines informativos y contenido exclusivo recompensa al comprador recurrente, elevando su valor de vida útil (LTV).`;
+            } else {
+                resBox.innerHTML = `<em style="color: #64748B;">Elige una opción arriba para desplegar de forma automatizada los canales ideales sugeridos junto a su justificación de marketing.</em>`;
+            }
+        }
+
+        // --- 9. EJERCICIO INTERACTIVO: ELIGE TU COMBO ---
+        function calcularCombo() {
+            const isB2B = document.getElementById('biz_b2b').checked;
+            const budget = document.querySelector('input[name="p_budget"]:checked').value;
+            const outBox = document.getElementById('comboResult');
+
+            let canalesSugeridos = "";
+            let justificacion = "";
+
+            if (isB2B) {
+                // Lógica de Servicios o Negocios B2B
+                if (budget === 'bajo') {
+                    canalesSugeridos = "LinkedIn Orgánico + Email Marketing Manual";
+                    justificacion = "Ideal para consultorías. Permite conectar directamente con tomadores de decisiones y enviar propuestas personalizadas a coste cero.";
+                } else if (budget === 'medio') {
+                    canalesSugeridos = "LinkedIn Enfocado + Publicidad en Google Search";
+                    justificacion = "Combina la prospección activa en redes profesionales con la captura de demanda activa de empresas buscando tus soluciones en buscadores.";
+                } else {
+                    canalesSugeridos = "Estrategia Omnicanal: LinkedIn Ads + Embajadores del Sector + Automatización de Email de alto valor";
+                    justificacion = "Inversión integral dirigida a dominar el nicho mediante líderes de opinión corporativos y campañas pagadas hiper-segmentadas de alta conversión.";
+                }
+            } else {
+                // Lógica de Consumo / Alimentos B2C (Ej. The Smart Roll)
+                if (budget === 'bajo') {
+                    canalesSugeridos = "TikTok Orgánico + Instagram + Contenido de Formato Vertical";
+                    justificacion = "Apalanca el poder visual y la viralidad algorítmica. Diseña empaques llamativos y promueve que los clientes compartan sus compras.";
+                } else if (budget === 'medio') {
+                    canalesSugeridos = "Meta Ads (Instagram) + Micro-influencers Locales";
+                    justificacion = "Potencia tu alcance enviando muestras a embajadores locales de Guayaquil y reforzando los fines de semana con pauta geolocalizada a la redonda.";
+                } else {
+                    canalesSugeridos = "Ecosistema Total: TikTok/Meta Ads continuos + Macro-Embajadores + Automatizaciones masivas de conversión";
+                    justificacion = "Control total del mercado minorista alternando el alcance expansivo de figuras masivas con campañas automatizadas de conversión y retargeting agresivo.";
+                }
+            }
+
+            outBox.innerHTML = `⚡ <strong>Tu Combo de Canales Recomendado:</strong> ${canalesSugeridos}.<br><br><strong>Enfoque Estratégico ECOTEC:</strong> ${justificacion}`;
+        }
+    </script>
+</body>
+</html>

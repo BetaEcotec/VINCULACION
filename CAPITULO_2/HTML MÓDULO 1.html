@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subtema 1: Fundamentos del Plan Estratégico y Público Objetivo - Ecotec</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        :root {
+            --primary: #1E5FA6;
+            --primary-dark: #122E7A;
+            --accent: #2D6DB5;
+            --text-main: #1A1A1A;
+            --text-muted: #444444;
+            --bg-light: #F5F6FA;
+            --bg-card: #EBF3FC;
+            --white: #FFFFFF;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--white);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Style */
+        .header {
+            background-color: var(--white);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 15px 4%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .header .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .logo-img {
+            height: 40px;
+            width: auto;
+        }
+
+        .header .brand-text {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .header .session-badge {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        main {
+            margin-top: 75px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F5F6FA 100%);
+            padding: 80px 4% 60px 4%;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background-color: var(--bg-card);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--text-main);
+            font-weight: 700;
+            max-width: 800px;
+            margin: 0 auto 15px auto;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+        }
+
+        /* KPI Section */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .kpi-card {
+            background: var(--white);
+            padding: 25px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(18,46,122,0.08);
+        }
+
+        .kpi-num {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .kpi-label {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Section Global Settings */
+        .section-container {
+            padding: 80px 4%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title-block {
+            margin-bottom: 45px;
+        }
+
+        .section-title-block h2 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            position: relative;
+            padding-left: 15px;
+            font-weight: 700;
+        }
+
+        .section-title-block h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15%;
+            height: 70%;
+            width: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Section A Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background-color: var(--white);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+
+        .info-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+
+        .info-card .icon-box {
+            background-color: var(--bg-card);
+            color: var(--primary);
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .info-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .info-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .intro-box {
+            background-color: var(--bg-card);
+            border-left: 4px solid var(--primary);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 35px;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+        }
+
+        /* Section B Layout */
+        .bg-grey-sec {
+            background-color: var(--bg-light);
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 850px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            padding: 35px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--bg-light);
+            padding-bottom: 20px;
+        }
+
+        .profile-avatar {
+            background-color: var(--primary);
+            color: var(--white);
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-meta h3 {
+            font-size: 1.3rem;
+            color: var(--text-main);
+        }
+
+        .profile-meta p {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .detail-item {
+            display: flex;
+            gap: 15px;
+        }
+
+        .detail-item i {
+            color: var(--accent);
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .detail-item strong {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            margin-bottom: 2px;
+        }
+
+        .detail-item span {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* Age Bar Chart Vis */
+        .age-vis-box {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .age-vis-box h4 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .spectrum-bar {
+            height: 24px;
+            background-color: #E2E8F0;
+            border-radius: 12px;
+            position: relative;
+            margin: 40px 0 20px 0;
+        }
+
+        .spectrum-highlight {
+            position: absolute;
+            left: 16.6%; /* Maps roughly to 25 within 18-60 spectrum */
+            width: 47.6%; /* Maps width up to 45 */
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .spectrum-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding: 0 5px;
+        }
+
+        /* Dashboard Styles (Section C) */
+        .db-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 25px;
+        }
+
+        .toggle-btn-group {
+            background-color: var(--bg-light);
+            padding: 4px;
+            border-radius: 8px;
+            display: inline-flex;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .toggle-btn.active {
+            background-color: var(--white);
+            color: var(--primary-dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            font-weight: 600;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .chart-card {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .chart-container-box {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chart-card-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .chart-card-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .chart-value-overlay {
+            position: absolute;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Interactive Exercise (Section D) */
+        .exercise-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .exercise-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-box {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.06);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.02);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+            accent-color: var(--primary);
+            height: 6px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .slider-val {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 65px;
+            background: var(--bg-card);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .chips-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chip {
+            background-color: var(--bg-light);
+            border: 1px solid rgba(0,0,0,0.05);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+
+        .chip.selected {
+            background-color: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .checkbox-item input {
+            accent-color: var(--primary);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .action-btn {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-btn:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 4px 15px rgba(18,46,122,0.2);
+        }
+
+        /* Resulting Profile Preview */
+        .result-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .result-placeholder {
+            border: 2px dashed #CBD5E1;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            color: #94A3B8;
+            background-color: rgba(245,246,250,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            height: 100%;
+            justify-content: center;
+        }
+
+        .result-placeholder i {
+            width: 40px;
+            height: 40px;
+            color: #94A3B8;
+        }
+
+        .output-card {
+            background: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(18,46,122,0.05);
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .output-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid var(--bg-light);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .output-avatar {
+            background-color: var(--accent);
+            color: var(--white);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            border: 1px solid rgba(0,0,0,0.1);
+            margin-top: 15px;
+        }
+        .btn-secondary:hover {
+            background-color: #E2E8F0;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--white);
+            border-top: 3px solid var(--accent);
+            padding: 30px 4%;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .footer-socials span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Fade-in Scroll Animation classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: all 0.6s cubic-bezier(0.215, 0.610, 0.355, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER INSTITUCIONAL -->
+    <header class="header">
+        <div class="logo-container">
+            <!-- Representación estilizada basada en requerimientos -->
+            <span class="brand-text">Universidad <span style="color: var(--primary);">Ecotec</span></span>
+        </div>
+        <div class="session-badge">Sesión S1.1</div>
+    </header>
+
+    <main>
+        <!-- SECCIÓN HERO -->
+        <section class="hero">
+            <div class="hero-badge">Unidad 1: Estrategia Digital</div>
+            <h1>Fundamentos del Plan Estratégico y Público Objetivo</h1>
+            <p>La base fundamental de la Guía del Emprendedor ECOTEC, potenciada con herramientas de Inteligencia Artificial para acelerar tu crecimiento.</p>
+            
+            <!-- BARRA DE KPIs DESTACADOS -->
+            <div class="kpi-container">
+                <div class="kpi-card">
+                    <div class="kpi-num" data-target="92">0%</div>
+                    <div class="kpi-label">Alcance Promedio</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-num" data-target="88">0%</div>
+                    <div class="kpi-label">Tasa de Interacción</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-num" data-target="350" data-prefix="+">+0%</div>
+                    <div class="kpi-label">Retorno de Inversión (ROI)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN A: ¿QUÉ ES Y POR QUÉ ES CLAVE? -->
+        <section class="section-container reveal">
+            <div class="section-title-block">
+                <h2>El Plan de Marketing Digital</h2>
+            </div>
+            
+            <div class="intro-box">
+                Un plan de marketing digital no es un documento teórico estático; es la hoja de ruta estratégica indispensable para estructurar las acciones comerciales de tu emprendimiento, optimizando recursos mediante datos medibles en tiempo real.
+            </div>
+
+            <div class="grid-cards">
+                <div class="info-card">
+                    <div class="icon-box"><i data-feather="compass"></i></div>
+                    <h3>Dirección Clara</h3>
+                    <p>Evita esfuerzos dispersos. Define objetivos comerciales precisos para saber exactamente hacia dónde enfocar tu energía y presupuesto diario.</p>
+                </div>
+                <div class="info-card">
+                    <div class="icon-box"><i data-feather="bar-chart-2"></i></div>
+                    <h3>Medición Absoluta</h3>
+                    <p>En el entorno digital todo se puede medir. Identifica qué tácticas generan ventas reales y cuáles necesitan optimización inmediata.</p>
+                </div>
+                <div class="info-card">
+                    <div class="icon-box"><i data-feather="cpu"></i></div>
+                    <h3>Optimización de Recursos</h3>
+                    <p>Crucial para emprendimientos que inician con presupuestos limitados. Dirige tu inversión solo a los canales que rinden frutos.</p>
+                </div>
+                <div class="info-card">
+                    <div class="icon-box"><i data-feather="users"></i></div>
+                    <h3>Conexión Directa</h3>
+                    <p>Permite establecer un canal de comunicación genuino y automatizado con tu cliente ideal en las plataformas donde ya pasa su tiempo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN B: PERFIL DEL PÚBLICO OBJETIVO -->
+        <section class="bg-grey-sec">
+            <div class="section-container reveal">
+                <div class="section-title-block">
+                    <h2>Público Objetivo Central</h2>
+                </div>
+                
+                <div class="profile-layout">
+                    <!-- Ficha Visual Buyer Persona -->
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <i data-feather="user"></i>
+                            </div>
+                            <div class="profile-meta">
+                                <h3>Visionarios Digitales</h3>
+                                <p>Segmento Core de Campaña</p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-details">
+                            <div class="detail-item">
+                                <i data-feather="calendar"></i>
+                                <div>
+                                    <strong>Rango de Edad</strong>
+                                    <span>25 a 45 años. Jóvenes profesionales y adultos contemporáneos.</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i data-feather="target"></i>
+                                <div>
+                                    <strong>Perfil Emprendedor</strong>
+                                    <span>Decididos a transformar una idea abstracta en un modelo de negocio real, sostenible y escalable.</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i data-feather="zap"></i>
+                                <div>
+                                    <strong>Demanda de Contenido</strong>
+                                    <span>Exigen información rápida, estructurada, modular y de inmediata aplicación práctica.</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i data-feather="smartphone"></i>
+                                <div>
+                                    <strong>Necesidad Tecnológica</strong>
+                                    <span>Buscan herramientas digitales e IA que optimicen su tiempo y reduzcan la curva de aprendizaje.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Espectro Visual -->
+                    <div class="age-vis-box">
+                        <h4>Ubicación en el Espectro de Mercado</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">
+                            El segmento de 25-45 años representa el bloque de mayor tracción digital y capacidad de inversión actual.
+                        </p>
+                        <div class="spectrum-bar">
+                            <div class="spectrum-highlight">Segmento Objetivo: 25-45 años</div>
+                        </div>
+                        <div class="spectrum-labels">
+                            <span>18 años</span>
+                            <span>25 años</span>
+                            <span>45 years</span>
+                            <span>60 años</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN C: DASHBOARD DE RESULTADOS INTERACTIVO -->
+        <section class="section-container reveal">
+            <div class="section-title-block">
+                <h2>Dashboard de Rendimiento Estratégico</h2>
+            </div>
+
+            <div class="db-controls">
+                <div class="toggle-btn-group">
+                    <button class="toggle-btn active" onclick="updateDashboard('monthly')">Vista Mensual</button>
+                    <button class="toggle-btn" onclick="updateDashboard('quarterly')">Vista Trimestral</button>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Gráfico Alcance -->
+                <div class="chart-card">
+                    <div class="chart-container-box">
+                        <canvas id="chartAlcance"></canvas>
+                        <div class="chart-value-overlay" id="valAlcance">92%</div>
+                    </div>
+                    <div class="chart-card-info">
+                        <h3>Alcance Total</h3>
+                        <p>Porcentaje de penetración en el segmento meta definido.</p>
+                    </div>
+                </div>
+
+                <!-- Gráfico Interacción -->
+                <div class="chart-card">
+                    <div class="chart-container-box">
+                        <canvas id="chartInteraccion"></canvas>
+                        <div class="chart-value-overlay" id="valInteraccion">88%</div>
+                    </div>
+                    <div class="chart-card-info">
+                        <h3>Interacción (Engagement)</h3>
+                        <p>Usuarios que realizan acciones de valor con el contenido.</p>
+                    </div>
+                </div>
+
+                <!-- Gráfico ROI -->
+                <div class="chart-card">
+                    <div class="chart-container-box">
+                        <canvas id="chartROI"></canvas>
+                    </div>
+                    <div class="chart-card-info">
+                        <h3>Crecimiento del ROI</h3>
+                        <p>Retorno financiero progresivo de la inversión publicitaria.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN D: EJERCICIO INTERACTIVO -->
+        <section class="bg-grey-sec">
+            <div class="section-container reveal">
+                <div class="section-title-block">
+                    <h2>Ejercicio Práctico: Define tu Cliente Ideal</h2>
+                </div>
+
+                <div class="exercise-layout">
+                    <!-- Formulario -->
+                    <div class="form-box">
+                        <div class="form-group">
+                            <label>1. Define el Rango de Edad Promedio</label>
+                            <div class="slider-container">
+                                <input type="range" id="inputEdad" min="18" max="65" value="30" oninput="document.getElementById('lblEdad').innerText = this.value + ' años'">
+                                <div class="slider-val" id="lblEdad">30 años</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>2. Necesidad Principal (Selecciona una)</label>
+                            <div class="chips-pool" id="poolNecesidades">
+                                <div class="chip selected" onclick="selectChip(this, 'Ahorrar tiempo mediante automatización')">Ahorrar tiempo</div>
+                                <div class="chip" onclick="selectChip(this, 'Aprender metodologías de manera ágil')">Aprender rápido</div>
+                                <div class="chip" onclick="selectChip(this, 'Acceso directo a herramientas y plantillas')">Herramientas digitales</div>
+                                <div class="chip" onclick="selectChip(this, 'Optimizar presupuestos publicitarios reducidos')">Reducir costos</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>3. Comportamiento Digital Habitual (Múltiple)</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" value="Consume contenido educativo corto (Reels/TikTok)" checked> Consume contenido en formatos cortos
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" value="Usa plataformas profesionales de networking (LinkedIn)" checked> Utiliza redes de perfil profesional
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" value="Prefiere herramientas web interactivas frente a PDFs estáticos"> Prioriza herramientas interactivas y dinámicas
+                                </label>
+                            </div>
+                        </div>
+
+                        <button class="action-btn" onclick="generatePersona()">
+                            <i data-feather="sliders"></i> Generar Ficha de Buyer Persona
+                        </button>
+                    </div>
+
+                    <!-- Ficha Resultante Interactiva -->
+                    <div class="result-container">
+                        <div id="placeholderResult" class="result-placeholder">
+                            <i data-feather="user-plus"></i>
+                            <p>Completa las variables de la izquierda y haz clic en "Generar Ficha" para modelar tu arquetipo de cliente.</p>
+                        </div>
+
+                        <div id="cardResult" class="output-card" style="display: none;">
+                            <div class="output-header">
+                                <div class="output-avatar"><i data-feather="award"></i></div>
+                                <div>
+                                    <h3 style="font-size:1.2rem; color:var(--text-main);">Tu Cliente Ideal</h3>
+                                    <p style="font-size:0.85rem; color:var(--primary); font-weight:600;">Perfil de Arquetipo Generado</p>
+                                </div>
+                            </div>
+                            <div class="profile-details" id="resultDetails">
+                                <!-- JS inyectará el contenido aquí -->
+                            </div>
+                            <button class="action-btn btn-secondary" onclick="copyPersonaText()">
+                                <i data-feather="copy"></i> Copiar Datos del Perfil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                © 2026 Universidad Ecotec. Todos los derechos reservados. Guía Digital Interactiva.
+            </div>
+            <div class="footer-socials">
+                <span><i data-feather="facebook" style="width:16px; height:16px;"></i> @universidadecotec</span>
+                <span><i data-feather="instagram" style="width:16px; height:16px;"></i> uecotec</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Inicialización de Iconos Feather
+        feather.replace();
+
+        // --- CONTADORES ANIMADOS (KPIs) ---
+        const kpis = document.querySelectorAll('.kpi-num');
+        const startKpiAnimation = () => {
+            kpis.forEach(kpi => {
+                const target = parseInt(kpi.getAttribute('data-target'));
+                const prefix = kpi.getAttribute('data-prefix') || '';
+                const suffix = prefix === '+' ? '%' : '%';
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        kpi.innerText = prefix + target + '%';
+                        clearInterval(timer);
+                    } else {
+                        kpi.innerText = prefix + Math.floor(current) + '%';
+                    }
+                }, 20);
+            });
+        };
+
+        // --- ANIMACIONES AL HACER SCROLL (Intersection Observer) ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    if(entry.target.contains(document.querySelector('.kpi-container'))) {
+                        startKpiAnimation();
+                    }
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        // Observar también el cuerpo/hero para iniciar los KPIs inmediatamente
+        observer.observe(document.querySelector('.hero'));
+
+        // --- SECCIÓN C: CONFIGURACIÓN DE GRÁFICOS (CHART.JS) ---
+        const ctxAlcance = document.getElementById('chartAlcance').getContext('2d');
+        const ctxInteraccion = document.getElementById('chartInteraccion').getContext('2d');
+        const ctxROI = document.getElementById('chartROI').getContext('2d');
+
+        const gaugeOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '80%',
+            plugins: { legend: { display: false }, tooltip: { enabled: false } }
+        };
+
+        // Charts data simulation
+        const dataSets = {
+            monthly: {
+                alcance: [92, 8],
+                interaccion: [88, 12],
+                roi: [100, 180, 260, 350],
+                roiLabels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4']
+            },
+            quarterly: {
+                alcance: [95, 5],
+                interaccion: [91, 9],
+                roi: [120, 210, 310, 420],
+                roiLabels: ['Mes 1', 'Mes 2', 'Mes 3', 'Cierre Q']
+            }
+        };
+
+        let chartA = new Chart(ctxAlcance, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: dataSets.monthly.alcance,
+                    backgroundColor: ['#1E5FA6', '#E2E8F0'],
+                    borderWidth: 0
+                }]
+            },
+            options: gaugeOptions
+        });
+
+        let chartB = new Chart(ctxInteraccion, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: dataSets.monthly.interaccion,
+                    backgroundColor: ['#2D6DB5', '#E2E8F0'],
+                    borderWidth: 0
+                }]
+            },
+            options: gaugeOptions
+        });
+
+        let chartC = new Chart(ctxROI, {
+            type: 'line',
+            data: {
+                labels: dataSets.monthly.roiLabels,
+                datasets: [{
+                    label: 'Progreso ROI %',
+                    data: dataSets.monthly.roi,
+                    borderColor: '#122E7A',
+                    backgroundColor: 'rgba(30, 95, 166, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { ticks: { callback: value => '+' + value + '%' } } }
+            }
+        });
+
+        window.updateDashboard = (type) => {
+            // Update Active Buttons styling
+            const buttons = document.querySelectorAll('.toggle-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update text values
+            document.getElementById('valAlcance').innerText = type === 'monthly' ? '92%' : '95%';
+            document.getElementById('valInteraccion').innerText = type === 'monthly' ? '88%' : '91%';
+
+            // Update charts data smoothly
+            chartA.data.datasets[0].data = dataSets[type].alcance;
+            chartB.data.datasets[0].data = dataSets[type].interaccion;
+            chartC.data.labels = dataSets[type].roiLabels;
+            chartC.data.datasets[0].data = dataSets[type].roi;
+
+            chartA.update();
+            chartB.update();
+            chartC.update();
+        };
+
+        // --- SECCIÓN D: LÓGICA DE EJERCICIO INTERACTIVO ---
+        let selectedNecesidad = "Ahorrar tiempo mediante automatización";
+
+        window.selectChip = (el, val) => {
+            const chips = document.querySelectorAll('#poolNecesidades .chip');
+            chips.forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedNecesidad = val;
+        };
+
+        window.generatePersona = () => {
+            const edad = document.getElementById('inputEdad').value;
+            const checkboxes = document.querySelectorAll('.checkbox-group input:checked');
+            
+            let comportamientosHtml = '';
+            let comportamientosText = '';
+            
+            if(checkboxes.length === 0) {
+                comportamientosHtml = '<li>No se seleccionaron comportamientos específicos.</li>';
+            } else {
+                checkboxes.forEach(cb => {
+                    comportamientosHtml += `<div style="display:flex; gap:8px; margin-bottom:6px;"><i data-feather="check-circle" style="width:16px; color:var(--primary); flex-shrink:0; margin-top:2px;"></i><span>${cb.value}</span></div>`;
+                    comportamientosText += `- ${cb.value}
+`;
+                });
+            }
+
+            const htmlTemplate = `
+                <div class="detail-item">
+                    <i data-feather="calendar"></i>
+                    <div>
+                        <strong>Edad del Arquetipo</strong>
+                        <span>${edad} años de edad promedio.</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i data-feather="target"></i>
+                    <div>
+                        <strong>Necesidad o Motivación Crítica</strong>
+                        <span>${selectedNecesidad}.</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i data-feather="smartphone"></i>
+                    <div>
+                        <strong>Patrones de Consumo Digital</strong>
+                        <div style="margin-top:8px;">${comportamientosHtml}</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('placeholderResult').style.display = 'none';
+            const cardResult = document.getElementById('cardResult');
+            const detailsBox = document.getElementById('resultDetails');
+            
+            detailsBox.innerHTML = htmlTemplate;
+            cardResult.style.display = 'block';
+            
+            // Re-renderizar iconos inyectados dinámicamente
+            feather.replace();
+
+            // Guardar datos en el elemento para facilitar copiado limpio en texto
+            cardResult.setAttribute('data-raw', `ARQUETIPO DE CLIENTE IDEAL
+Edad promedio: ${edad} años
+Necesidad clave: ${selectedNecesidad}
+Comportamientos:
+${comportamientosText}`);
+        };
+
+        window.copyPersonaText = () => {
+            const textToCopy = document.getElementById('cardResult').getAttribute('data-raw');
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert('¡Datos de tu cliente ideal copiados al portapapeles con éxito!');
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        };
+    </script>
+</body>
+</html>

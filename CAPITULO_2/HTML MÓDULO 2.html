@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revista Digital ECOTEC - La IA en el Ecosistema Digital</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* --- ESTILOS COMPATIBLES CON REQUISITOS Y MANUAL DE ESTILO ECOTEC --- */
+        :root {
+            --azul-institucional: #1E5FA6;
+            --azul-acento: #2D6DB5;
+            --titulo-negro: #1A1A1A;
+            --cuerpo-gris: #444444;
+            --fondo-caja: #EBF3FC;
+            --blanco: #FFFFFF;
+            --gris-claro: #F8FAFC;
+            --shadow: 0 4px 15px rgba(0,0,0,0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Calibri', 'Segoe UI', sans-serif;
+            background-color: var(--blanco);
+            color: var(--cuerpo-gris);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        /* --- HEADER & BRANDING --- */
+        header {
+            background-color: var(--blanco);
+            border-bottom: 3px solid var(--azul-institucional);
+            padding: 20px 5%;
+            position: relative;
+            display: block;
+        }
+
+        .header-container {
+            display: table;
+            width: 100%;
+        }
+
+        .header-left {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .header-right {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
+        }
+
+        .logo-ecotec {
+            height: 55px;
+            width: auto;
+        }
+
+        .revista-tag {
+            background-color: var(--azul-institucional);
+            color: var(--blanco);
+            padding: 4px 12px;
+            font-size: 11pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            color: var(--titulo-negro);
+            font-size: 24pt;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* --- INTRODUCCIÓN --- */
+        .intro-section {
+            background-color: var(--fondo-caja);
+            border-left: 6px solid var(--azul-institucional);
+            padding: 25px;
+            margin-bottom: 40px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .intro-section p {
+            font-size: 13pt;
+            color: var(--titulo-negro);
+            font-weight: 500;
+        }
+
+        /* --- TITULARES DE SECCIÓN --- */
+        .section-title {
+            color: var(--azul-institucional);
+            font-size: 18pt;
+            margin-bottom: 25px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--fondo-caja);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- GRID / TABLA DE PILARES --- */
+        .pilares-container {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 20px;
+            margin-bottom: 40px;
+        }
+
+        .pilar-card {
+            display: table-cell;
+            width: 25%;
+            background: var(--gris-claro);
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 24px;
+            vertical-align: top;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .pilar-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--azul-acento);
+            background: var(--blanco);
+        }
+
+        .pilar-icon {
+            font-size: 28pt;
+            margin-bottom: 15px;
+            color: var(--azul-institucional);
+        }
+
+        .pilar-title {
+            color: var(--titulo-negro);
+            font-size: 14pt;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .pilar-desc {
+            font-size: 10.5pt;
+            color: var(--cuerpo-gris);
+            margin-bottom: 15px;
+        }
+
+        .pilar-ejemplo {
+            font-size: 9.5pt;
+            background-color: var(--fondo-caja);
+            color: var(--azul-institucional);
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* --- DASHBOARDS Y FILAS BI-COLUMNA --- */
+        .row {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 25px;
+            margin-bottom: 20px;
+        }
+
+        .col-6 {
+            display: table-cell;
+            width: 50%;
+            vertical-align: top;
+            background: var(--blanco);
+            border: 1px solid #E2E8F0;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .dashboard-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .dashboard-title {
+            font-size: 14pt;
+            color: var(--titulo-negro);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Controles de Dashboard 1 */
+        .btn-group {
+            display: inline-block;
+            background: var(--fondo-caja);
+            padding: 4px;
+            border-radius: 6px;
+        }
+
+        .btn-toggle {
+            background: transparent;
+            border: none;
+            padding: 8px 16px;
+            font-size: 10pt;
+            font-weight: bold;
+            color: var(--azul-institucional);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .btn-toggle.active {
+            background: var(--azul-institucional);
+            color: var(--blanco);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 260px;
+            width: 100%;
+        }
+
+        /* --- FORMULARIOS / SIMULADORES --- */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 10pt;
+            font-weight: bold;
+            color: var(--titulo-negro);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 10.5pt;
+            color: var(--cuerpo-gris);
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--azul-institucional);
+        }
+
+        .btn-primary {
+            display: block;
+            width: 100%;
+            background-color: var(--azul-institucional);
+            color: var(--blanco);
+            border: none;
+            padding: 12px;
+            font-size: 11pt;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--azul-acento);
+        }
+
+        .prompt-output {
+            margin-top: 15px;
+            background-color: var(--fondo-caja);
+            border-left: 4px solid var(--azul-institucional);
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 10.5pt;
+            color: var(--titulo-negro);
+            min-height: 80px;
+        }
+
+        /* --- CASO DE USO REAL --- */
+        .flow-container {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 15px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        .flow-step {
+            display: table-cell;
+            width: 25%;
+            background: var(--gris-claro);
+            border: 1px solid #E2E8F0;
+            padding: 20px;
+            border-radius: 8px;
+            position: relative;
+            vertical-align: top;
+            text-align: center;
+        }
+
+        .step-number {
+            background-color: var(--azul-institucional);
+            color: var(--blanco);
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 50%;
+            font-weight: bold;
+            margin: 0 auto 12px auto;
+            font-size: 11pt;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: var(--titulo-negro);
+            font-size: 11pt;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 10pt;
+            color: var(--cuerpo-gris);
+        }
+
+        /* --- CALLOUT / BANNER DATO RELEVANTE --- */
+        .callout-banner {
+            background: linear-gradient(135deg, var(--azul-institucional), var(--azul-acento));
+            color: var(--blanco);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .callout-stat {
+            font-size: 28pt;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .callout-text {
+            font-size: 12pt;
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* --- FOOTER INSTITUCIONAL OBLIGATORIO --- */
+        footer {
+            background-color: var(--azul-acento);
+            color: var(--blanco);
+            padding: 15px 5%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            font-size: 10pt;
+            z-index: 1000;
+        }
+
+        /* RESPONSIVE FLUIDITY */
+        @media (max-width: 768px) {
+            .pilares-container, .row, .col-6, .flow-container, .flow-step, .pilar-card {
+                display: block !important;
+                width: 100% !important;
+                margin-bottom: 20px;
+            }
+            .pilares-container, .row, .flow-container {
+                border-spacing: 0;
+            }
+            body {
+                padding-bottom: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGO Y ENCABEZADO INSTITUCIONAL -->
+    <header>
+        <div class="header-container">
+            <div class="header-left">
+                <span class="revista-tag">Plan Estratégico de Marketing Digital</span>
+                <h1>LA IA COMO HERRAMIENTA CENTRAL DEL ECOSISTEMA DIGITAL</h1>
+            </div>
+            <div class="header-right">
+                <img src="https://vinculacion.ecotec.edu.ec/wp-content/uploads/2026/04/ecotec-site-icon-1.webp" alt="Ecotec Logo" class="logo-ecotec">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- 1. INTRODUCCIÓN BREVE -->
+        <section class="intro-section">
+            <p>En el entorno competitivo actual, la Inteligencia Artificial ha dejado de ser una opción tecnológica para transformarse en el núcleo estratégico del ecosistema de marketing digital. Para los emprendedores, su adopción representa el motor clave para automatizar procesos, hiper-personalizar la experiencia del usuario y escalar decisiones comerciales basadas en datos precisos en tiempo real.</p>
+        </section>
+
+        <!-- 2. 4 PILARES DE LA IA EN EL MARKETING DIGITAL -->
+        <h2 class="section-title">4 Pilares de la IA en el Marketing Digital</h2>
+        <div class="pilares-container">
+            <div class="pilar-card">
+                <div class="pilar-icon">💡</div>
+                <div class="pilar-title">Generador de Ideas</div>
+                <div class="pilar-desc">Sugiere estrategias personalizadas, conceptos comerciales disruptivos y ángulos de venta adaptados a tu sector.</div>
+                <div class="pilar-ejemplo">Ejemplo: ChatGPT / Claude</div>
+            </div>
+            <div class="pilar-card">
+                <div class="pilar-icon">💬</div>
+                <div class="pilar-title">Asistente Virtual 24/7</div>
+                <div class="pilar-desc">Resuelve dudas y atiende consultas de clientes potenciales de forma fluida y en tiempo real, sin descanso.</div>
+                <div class="pilar-ejemplo">Ejemplo: ManyChat / Landbot AI</div>
+            </div>
+            <div class="pilar-card">
+                <div class="pilar-icon">📄</div>
+                <div class="pilar-title">Resúmenes Automáticos</div>
+                <div class="pilar-desc">Síntesis inmediata de contenidos extensos, reportes de mercado y transcripciones para optimizar tu tiempo.</div>
+                <div class="pilar-ejemplo">Ejemplo: Jasper / Notion AI</div>
+            </div>
+            <div class="pilar-card">
+                <div class="pilar-icon">🎯</div>
+                <div class="pilar-title">Recomendaciones</div>
+                <div class="pilar-desc">Curaduría inteligente de productos y ofertas basadas estrictamente en el comportamiento dinámico del usuario.</div>
+                <div class="pilar-ejemplo">Ejemplo: RetailRocket / Amazon AI</div>
+            </div>
+        </div>
+
+        <!-- Fila de Dashboards Interactivos -->
+        <div class="row">
+            
+            <!-- 3. DASHBOARD DINÁMICO #1: IMPACTO DE LA IA -->
+            <div class="col-6">
+                <div class="dashboard-header">
+                    <div class="dashboard-title">Dashboard: Impacto de la IA en Campañas</div>
+                    <div class="btn-group">
+                        <button class="btn-toggle active" onclick="updateChart('con')">Con IA</button>
+                        <button class="btn-toggle" onclick="updateChart('antes')">Antes de IA</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="impactoChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 4. DASHBOARD DINÁMICO #2: SIMULADOR DE PROMPT -->
+            <div class="col-6">
+                <div class="dashboard-title" style="text-align: center; margin-bottom: 20px;">Simulador de Prompt Estratégico</div>
+                
+                <div class="form-group">
+                    <label for="negocio">Tipo de Negocio</label>
+                    <select id="negocio" class="form-control">
+                        <option value="E-commerce de Moda">E-commerce de Moda</option>
+                        <option value="Agencia de Servicios / Consultoría">Agencia de Servicios / Consultoría</option>
+                        <option value="Restaurante / Cafetería local">Restaurante / Cafetería local</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="objetivo">Objetivo Estratégico</label>
+                    <select id="objetivo" class="form-control">
+                        <option value="Incrementar Ventas">Incrementar Ventas</option>
+                        <option value="Posicionamiento de Branding">Posicionamiento de Branding</option>
+                        <option value="Fidelización de Clientes">Fidelización de Clientes</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="canal">Canal de Distribución</label>
+                    <select id="canal" class="form-control">
+                        <option value="Redes Sociales (Instagram/TikTok)">Redes Sociales (Instagram/TikTok)</option>
+                        <option value="Email Marketing">Email Marketing</option>
+                        <option value="Marketing de Contenidos (Blog)">Marketing de Contenidos (Blog)</option>
+                    </select>
+                </div>
+
+                <button class="btn-primary" onclick="generarPrompt()">Generar Prompt sugerido</button>
+                
+                <div class="prompt-output" id="promptResult">
+                    <em>Selecciona tus opciones y haz clic en generar para simular tu prompt estratégico optimizado para IA...</em>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 5. SECCIÓN CASO DE USO REAL (FLUJO VISUAL) -->
+        <h2 class="section-title">Caso de Uso Real: Segmentación Inteligente</h2>
+        <p style="margin-bottom: 10px;">Descubre cómo un emprendedor optimiza su análisis cargando bases de datos crudas (Excel/CSV) directamente a la IA para extraer insights estratégicos sin necesidad de software complejo:</p>
+        
+        <div class="flow-container">
+            <div class="flow-step">
+                <div class="step-number">1</div>
+                <div class="step-title">Carga de Datos</div>
+                <div class="step-desc">Se sube el archivo Excel/CSV con las respuestas consolidadas de la encuesta de mercado a la IA.</div>
+            </div>
+            <div class="flow-step">
+                <div class="step-number">2</div>
+                <div class="step-title">Identificación de Patrones</div>
+                <div class="step-desc">La IA procesa los textos y respuestas estructuradas reconociendo tendencias repetitivas automáticamente.</div>
+            </div>
+            <div class="flow-step">
+                <div class="step-number">3</div>
+                <div class="step-title">Segmentación Avanzada</div>
+                <div class="step-desc">Agrupación automática de perfiles según variables clave: edad, rango de ingresos y zona geográfica.</div>
+            </div>
+            <div class="flow-step">
+                <div class="step-number">4</div>
+                <div class="step-title">Cálculo de Intención</div>
+                <div class="step-desc">La IA proyecta con precisión el % final de intención de compra real para dirigir la pauta publicitaria.</div>
+            </div>
+        </div>
+
+        <!-- 6. SECCIÓN DATO RELEVANTE (CALLOUT BANNER) -->
+        <div class="callout-banner">
+            <div class="callout-stat">+80%</div>
+            <div class="callout-text">De las empresas y startups líderes a nivel global reportan que la integración de herramientas basadas en Inteligencia Artificial ha transformado de forma directa sus procesos de marketing y la velocidad de ejecución de campañas.</div>
+        </div>
+
+        <!-- 7. EJERCICIO INTERACTIVO FINAL: PRACTICA TÚ MISMO -->
+        <h2 class="section-title">Practica tú mismo: Activa tu estrategia con IA</h2>
+        <div style="background: var(--gris-claro); border: 1px solid #E2E8F0; padding: 25px; border-radius: 8px; box-shadow: var(--shadow);">
+            <div class="form-group">
+                <label for="ideaNegocio">Escribe tu idea de negocio o sector actual:</label>
+                <input type="text" id="ideaNegocio" class="form-control" placeholder="Ej. Marca de joyería artesanal, Consultoría contable, App de entrenamiento...">
+            </div>
+            <button class="btn-primary" style="width: auto; padding: 12px 30px;" onclick="practicaEstrategia()">Sugerir Enfoque con IA</button>
+            <div class="prompt-output" id="practicaResult" style="margin-top: 20px; background: var(--blanco);">
+                <em>Ingresa tu sector e idea de negocio para recibir una recomendación de implementación inmediata.</em>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER INSTITUCIONAL OBLIGATORIO -->
+    <footer>
+        f @universidadecotec | 📷 uecotec &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; © 2026 Universidad ECOTEC - Escuela de Emprendimiento
+    </footer>
+
+    <!-- LÓGICA JAVASCRIPT PURA -->
+    <script>
+        // --- CONFIGURACIÓN DE CHART.JS ---
+        const ctx = document.getElementById('impactoChart').getContext('2d');
+        
+        const dataConIA = [92, 88, 350];
+        const dataAntesIA = [45, 30, 100];
+        const labels = ['Alcance (%)', 'Interacción (%)', 'ROI (%)'];
+
+        let impactoChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Métricas Obtenidas (%)',
+                    data: dataConIA,
+                    backgroundColor: ['#1E5FA6', '#2D6DB5', '#10B981'],
+                    borderRadius: 6,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#E2E8F0' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        function updateChart(mode) {
+            // Cambiar clases activas de los botones
+            const buttons = document.querySelectorAll('.btn-toggle');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (mode === 'con') {
+                event.target.classList.add('active');
+                impactoChart.data.datasets[0].data = dataConIA;
+            } else {
+                event.target.classList.add('active');
+                impactoChart.data.datasets[0].data = dataAntesIA;
+            }
+            impactoChart.update();
+        }
+
+        // --- SIMULADOR DE PROMPT ---
+        function generarPrompt() {
+            const negocio = document.getElementById('negocio').value;
+            const objetivo = document.getElementById('objetivo').value;
+            const canal = document.getElementById('canal').value;
+
+            let promptSugerido = `<strong>Prompt Optimizado:</strong> "Actúa como un experto en Growth Marketing con experiencia en <em>${negocio}</em>. Necesito que diseñes un plan de acción enfocado en <em>${objetivo}</em>, adaptado específicamente para el canal de <em>${canal}</em>. Propón 3 variaciones creativas estructuradas, define los ganchos iniciales de atención (hooks) y especifica la llamada a la acción (CTA) ideal para este perfil de consumidor."`;
+
+            document.getElementById('promptResult').innerHTML = promptSugerido;
+        }
+
+        // --- EJERCICIO INTERACTIVO FINAL ---
+        function practicaEstrategia() {
+            const idea = document.getElementById('ideaNegocio').value.trim();
+            if (!idea) {
+                document.getElementById('practicaResult').innerHTML = '<span style="color: #DC2626;">Por favor, ingresa una idea válida para poder generar tu recomendación institucional.</span>';
+                return;
+            }
+
+            const sugerencias = [
+                `Para tu negocio de <strong>"${idea}"</strong>, la mejor estrategia inicial con IA consiste en implementar un generador de contenido optimizado (como ChatGPT) para diseñar tu parrilla de contenidos mensual en menos de una hora, asegurando ganchos emocionales para tu audiencia meta.`,
+                `En el ecosistema de <strong>"${idea}"</strong>, te recomendamos integrar un agente automatizado en tus canales de atención primaria. Esto te permitirá clasificar prospectos calificados según presupuestos e intereses automáticamente antes de la interacción humana.`,
+                `Para potenciar <strong>"${idea}"</strong>, aprovecha la IA analítica. Sube la información histórica o encuestas de tus primeros 50 clientes y solicita una matriz de segmentación psicográfica detallada para afinar la puntería de tus anuncios de pago.`
+            ];
+
+            const randomIndex = Math.floor(Math.random() * sugerencias.length);
+            document.getElementById('practicaResult').innerHTML = sugerencias[randomIndex];
+        }
+    </script>
+</body>
+</html>
