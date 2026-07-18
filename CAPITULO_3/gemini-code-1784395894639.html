@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manejo de Presupuesto - ECOTEC</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            background-color: #f4f6f9;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease-in-out, visibility 0.6s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Colores institucionales ECOTEC */
+        .slide-1 {
+            background: linear-gradient(135deg, #0b3c5d 0%, #328cc1 100%);
+            color: white;
+        }
+
+        .slide-2 {
+            background-color: #ffffff;
+            color: #333;
+        }
+
+        /* Elementos Diapositiva 1 */
+        .logo {
+            max-width: 180px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.15));
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Elementos Diapositiva 2 */
+        .slide-2-title {
+            font-size: 2.5rem;
+            color: #0b3c5d;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .grid-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .card-link {
+            flex: 1;
+            min-width: 250px;
+            max-width: 280px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 25px 15px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 180px;
+            justify-content: center;
+        }
+
+        .card-link:hover {
+            transform: translateY(-5px);
+            border-color: #328cc1;
+            box-shadow: 0 10px 15px -3px rgba(50, 140, 193, 0.2);
+            background: #ffffff;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #0b3c5d;
+            line-height: 1.4;
+        }
+
+        /* Controles de Navegación */
+        .nav-btn {
+            position: absolute;
+            bottom: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid currentColor;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .slide-1 .nav-btn {
+            color: white;
+            right: 40px;
+        }
+
+        .slide-1 .nav-btn:hover {
+            background-color: white;
+            color: #0b3c5d;
+        }
+
+        .slide-2 .nav-btn {
+            color: #0b3c5d;
+            left: 40px;
+            border-color: #0b3c5d;
+        }
+
+        .slide-2 .nav-btn:hover {
+            background-color: #0b3c5d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider-container">
+        <!-- Diapositiva 1: Portada -->
+        <div class="slide slide-1 active" id="slide1">
+            <img class="logo" src="cropped-Logo.png" alt="Logo ECOTEC">
+            <h1 class="title">Manejo de Presupuesto</h1>
+            <p class="subtitle">Presentación Ejecutiva</p>
+            
+            <button class="nav-btn" onclick="nextSlide()">Siguiente &rarr;</button>
+        </div>
+
+        <!-- Diapositiva 2: Enlaces/Cuadros -->
+        <div class="slide slide-2" id="slide2">
+            <h2 class="slide-2-title">Estructura del Proyecto</h2>
+            
+            <div class="grid-container">
+                <!-- Enlace 1 -->
+                <a href="file:///C:/Users/labb_pc9/Downloads/Grupo_3_Presupuesto.index.html#calculadora" class="card-link" target="_blank">
+                    <div class="card-icon">🧮</div>
+                    <div class="card-title">Calculadora de Presupuesto</div>
+                </a>
+                
+                <!-- Enlace 2 -->
+                <a href="file:///C:/Users/labb_pc9/Downloads/Grupo_3_Estado%20de%20resultados%20integrales.html" class="card-link" target="_blank">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">Estado de Resultados Integrales</div>
+                </a>
+
+                <!-- Enlace 3 -->
+                <a href="file:///C:/Users/labb_pc9/Downloads/Guia_Estudio_Demanda_Facil.html" class="card-link" target="_blank">
+                    <div class="card-icon">📘</div>
+                    <div class="card-title">Guía de Estudio: Demanda Fácil</div>
+                </a>
+
+                <!-- Enlace 4 -->
+                <a href="file:///C:/Users/labb_pc9/Downloads/evaluacion_van_tir_ecotec.html" class="card-link" target="_blank">
+                    <div class="card-icon">📈</div>
+                    <div class="card-title">Evaluación VAN y TIR</div>
+                </a>
+
+                <!-- Enlace 5 -->
+                <a href="file:///C:/Users/labb_pc9/Downloads/Simulador_VAN_TIR_Interactivo.html" class="card-link" target="_blank">
+                    <div class="card-icon">🖥️</div>
+                    <div class="card-title">Simulador VAN TIR Interactivo</div>
+                </a>
+
+                <!-- Enlace 6 (Nuevo) -->
+                <a href="file:///C:/Users/labb_pc9/Downloads/HTML%20SEN.%20PRECIO.html" class="card-link" target="_blank">
+                    <div class="card-icon">🏷️</div>
+                    <div class="card-title">Análisis de Sensibilidad al Precio</div>
+                </a>
+            </div>
+
+            <button class="nav-btn" onclick="prevSlide()">&larr; Volver</button>
+        </div>
+    </div>
+
+    <script>
+        function nextSlide() {
+            document.getElementById('slide1').classList.remove('active');
+            document.getElementById('slide2').classList.add('active');
+        }
+
+        function prevSlide() {
+            document.getElementById('slide2').classList.remove('active');
+            document.getElementById('slide1').classList.add('active');
+        }
+    </script>
+</body>
+</html>
