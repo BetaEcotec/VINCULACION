@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Sensibilidad al Precio - ECOTEC</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #444444;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .logo-ecotec {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: auto;
+        }
+        .header-title {
+            color: #1A1A1A;
+            border-bottom: 4px solid #1E5FA6;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
+        h1 { font-size: 28px; margin: 0; color: #1E5FA6; }
+        .subtitle { font-size: 15px; color: #7f8c8d; margin-top: 5px; }
+
+        /* Concept Cards */
+        .concept-box {
+            background-color: #EBF3FC;
+            border-left: 5px solid #1E5FA6;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 0 6px 6px 0;
+        }
+        .concept-title {
+            font-weight: bold;
+            color: #1E5FA6;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+        .concept-text {
+            font-size: 13.5px;
+            margin: 0;
+        }
+
+        /* Interactive Section Layout */
+        .dashboard-grid {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .controls-panel {
+            flex: 1;
+            min-width: 300px;
+            background-color: #fcfcfc;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .display-panel {
+            flex: 1.2;
+            min-width: 350px;
+        }
+
+        /* Form styling */
+        .slider-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            font-size: 14px;
+            color: #1A1A1A;
+            margin-bottom: 5px;
+        }
+        .slider-value {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1E5FA6;
+            margin-top: 5px;
+        }
+        input[type="range"] {
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        /* Big KPI Cards */
+        .kpi-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .kpi-card {
+            flex: 1;
+            padding: 15px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+            text-align: center;
+            background: #fff;
+            transition: all 0.3s;
+        }
+        .kpi-card.positive { border-color: #2ecc71; background-color: #f4fbf7; }
+        .kpi-card.negative { border-color: #e74c3c; background-color: #fdf5f4; }
+        .kpi-card.neutral { border-color: #f39c12; background-color: #fef9e7; }
+        
+        .kpi-title { font-size: 13px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; }
+        .kpi-val { font-size: 26px; font-weight: bold; margin-top: 5px; color: #1A1A1A; }
+        .positive .kpi-val { color: #27ae60; }
+        .negative .kpi-val { color: #c0392b; }
+        .neutral .kpi-val { color: #d35400; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+        th {
+            background-color: #1E5FA6;
+            color: #ffffff;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eeeeee;
+        }
+        tr.highlighted-row td {
+            background-color: #e2effd !important;
+            font-weight: bold;
+        }
+        tr:nth-child(even):not(.highlighted-row) td {
+            background-color: #f9f9f9;
+        }
+
+        /* Footer */
+        .footer-banner {
+            background-color: #2D6DB5;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 12px;
+            margin-top: 40px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Logo Institucional -->
+    <img src="https://vinculacion.ecotec.edu.ec/wp-content/uploads/2024/02/ecotec-site-icon-1.webp" alt="ECOTEC" class="logo-ecotec">
+
+    <div class="header-title">
+        <h1>Análisis de Sensibilidad al Precio</h1>
+        <p class="subtitle">Aprende cómo un pequeño cambio en el precio altera por completo la utilidad y el VAN del proyecto.</p>
+    </div>
+
+    <!-- Caja de Concepto Corto -->
+    <div class="concept-box">
+        <div class="concept-title">💡 ¿Qué es el Análisis de Sensibilidad al Precio?</div>
+        <p class="concept-text">
+            Es una simulación en la que cambiamos el precio de venta para medir qué tan "sensible" es el proyecto. Nos ayuda a descubrir el <b>punto crítico</b> donde el negocio deja de ganar dinero y pasa a tener pérdidas.
+        </p>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- Panel Izquierdo: Controles Interactivos -->
+        <div class="controls-panel">
+            <h3 style="margin-top: 0; color: #1A1A1A; font-size: 16px;">Simulador de Escenarios</h3>
+            <p style="font-size:12.5px; color:#666; margin-bottom:20px;">Mueve el control deslizante para cambiar el precio unitario y observar el impacto instantáneo.</p>
+            
+            <div class="slider-group">
+                <label for="priceSlider">Precio Unitario de Venta ($):</label>
+                <input type="range" id="priceSlider" min="7" max="13" value="10" step="1" oninput="actualizarEscenario()">
+                <div class="slider-value" id="priceDisplay">$10.00</div>
+            </div>
+
+            <div style="background-color: #f1f5f9; padding: 12px; border-radius: 6px; font-size: 12.5px;">
+                <b style="color: #1A1A1A;">Datos Base del Proyecto:</b><br>
+                • Producción: 3,000 unidades/mes<br>
+                • Costo Variable Unitario: $4.00<br>
+                • Costos Fijos: $15,000/mes<br>
+                • Horizonte: 5 años a una tasa del 12%
+            </div>
+        </div>
+
+        <!-- Panel Derecho: Resultados Dinámicos y KPI -->
+        <div class="display-panel">
+            <div class="kpi-container">
+                <div id="kpiUtilidadCard" class="kpi-card">
+                    <div class="kpi-title">Utilidad Mensual</div>
+                    <div id="kpiUtilidad" class="kpi-val">$0.00</div>
+                </div>
+                <div id="kpiVANCard" class="kpi-card">
+                    <div class="kpi-title">VAN (5 Años)</div>
+                    <div id="kpiVAN" class="kpi-val">$0.00</div>
+                </div>
+            </div>
+
+            <h3 style="font-size: 15px; color: #1A1A1A; margin-top: 25px; margin-bottom: 5px;">Matriz de Sensibilidad General</h3>
+            <p style="font-size:12px; color:#666; margin: 0 0 10px 0;">La fila resaltada corresponde al precio seleccionado en el simulador.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Precio ($)</th>
+                        <th>Ingreso Mensual</th>
+                        <th>Costos Totales</th>
+                        <th>Utilidad Mensual</th>
+                        <th>VAN (12%)</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaSensibilidad">
+                    <!-- Filas dinámicas -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer Institucional -->
+    <div class="footer-banner">
+        <span>f @universidadecotec | 📷 uecotec</span>
+        <span>Casos Prácticos de Finanzas Básicas</span>
+    </div>
+</div>
+
+<script>
+// Datos exactos del archivo de sensibilidad provisto
+const matrizDatos = {
+    7: { ingreso: 21000, costos: 27000, utilidad: -6000, van: -259544 },
+    8: { ingreso: 24000, costos: 27000, utilidad: -3000, van: -129772 },
+    9: { ingreso: 27000, costos: 27000, utilidad: 0,     van: 0 },
+    10: { ingreso: 30000, costos: 27000, utilidad: 3000,  van: 129772 },
+    11: { ingreso: 33000, costos: 27000, utilidad: 6000,  van: 259544 },
+    12: { ingreso: 36000, costos: 27000, utilidad: 9000,  van: 389316 },
+    13: { ingreso: 39000, costos: 27000, utilidad: 12000, van: 519088 }
+};
+
+function actualizarEscenario() {
+    const precio = parseInt(document.getElementById('priceSlider').value);
+    document.getElementById('priceDisplay').innerText = `$${precio}.00`;
+    
+    const datos = matrizDatos[precio];
+    
+    // Formatear valores
+    document.getElementById('kpiUtilidad').innerText = `$${datos.utilidad.toLocaleString()}`;
+    document.getElementById('kpiVAN').innerText = `$${datos.van.toLocaleString()}`;
+    
+    // Cambiar estados de las tarjetas KPI
+    const cardUtil = document.getElementById('kpiUtilidadCard');
+    const cardVAN = document.getElementById('kpiVANCard');
+    
+    if (datos.utilidad > 0) {
+        cardUtil.className = "kpi-card positive";
+        cardVAN.className = "kpi-card positive";
+    } else if (datos.utilidad < 0) {
+        cardUtil.className = "kpi-card negative";
+        cardVAN.className = "kpi-card negative";
+    } else {
+        cardUtil.className = "kpi-card neutral";
+        cardVAN.className = "kpi-card neutral";
+    }
+    
+    // Regenerar la tabla resaltando la fila elegida
+    let htmlTabla = "";
+    for (let p in matrizDatos) {
+        let r = matrizDatos[p];
+        let claseFila = (parseInt(p) === precio) ? "class='highlighted-row'" : "";
+        
+        htmlTabla += `<tr ${claseFila}>
+            <td>$${p}.00</td>
+            <td>$${r.ingreso.toLocaleString()}</td>
+            <td>$${r.costos.toLocaleString()}</td>
+            <td style="color: ${r.utilidad >= 0 ? (r.utilidad > 0 ? '#27ae60' : '#d35400') : '#c0392b'}; font-weight: bold;">$${r.utilidad.toLocaleString()}</td>
+            <td style="color: ${r.van >= 0 ? (r.van > 0 ? '#27ae60' : '#d35400') : '#c0392b'}; font-weight: bold;">$${r.van.toLocaleString()}</td>
+        </tr>`;
+    }
+    document.getElementById('tablaSensibilidad').innerHTML = htmlTabla;
+}
+
+// Inicializar la tabla y los KPIs
+actualizarEscenario();
+</script>
+
+</body>
+</html>
