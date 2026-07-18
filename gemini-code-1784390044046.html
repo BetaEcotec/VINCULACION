@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso de Emprendedores GEM - Universidad Ecotec</title>
+    <style>
+        /* --- ESTILOS GENERALES Y CONFIGURACIÓN DE MARCA --- */
+        :root {
+            --blanco: #FFFFFF;
+            --azul-principal: #1E5FA6;
+            --azul-acento: #2D6DB5;
+            --negro-titulos: #1A1A1A;
+            --gris-texto: #444444;
+            --fondo-caja: #EBF3FC;
+            --fuente: 'Calibri', 'Segoe UI', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--fuente);
+            background-color: var(--blanco);
+            color: var(--gris-texto);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- LOGO INSTITUCIONAL --- */
+        .logo-ecotec {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            width: 180px;
+            height: auto;
+            z-index: 100;
+        }
+
+        /* --- CONTENEDOR DE SLIDES --- */
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 10%;
+            position: relative;
+            background-color: var(--blanco);
+            page-break-after: always;
+        }
+
+        /* --- FOOTER INSTITUCIONAL --- */
+        .footer-institucional {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: var(--azul-acento);
+            color: var(--blanco);
+            padding: 10px 30px;
+            font-size: 0.9rem;
+            border-top-right-radius: 8px;
+            font-weight: bold;
+        }
+
+        /* --- TIPOGRAFÍAS Y COMPONENTES --- */
+        h1, h2, h3 {
+            color: var(--negro-titulos);
+            font-weight: bold;
+        }
+
+        .titulo-seccion {
+            color: var(--azul-principal);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--azul-acento);
+            padding-bottom: 10px;
+            width: 100%;
+        }
+
+        /* --- SLIDE 1: PORTADA --- */
+        .portada-layout {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sesion-badge {
+            font-size: 6rem;
+            font-weight: 900;
+            color: var(--azul-principal);
+            flex: 1;
+            text-align: left;
+        }
+
+        .titulo-clase-container {
+            flex: 2;
+            border-left: 5px solid var(--azul-acento);
+            padding-left: 30px;
+        }
+
+        .titulo-clase-container h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+        }
+
+        .subtitulo-curso {
+            font-size: 1.5rem;
+            color: var(--azul-acento);
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- SLIDE 2: UNIDAD (BADGE CENTRAL) --- */
+        .badge-unidad {
+            background-color: var(--azul-principal);
+            color: var(--blanco);
+            padding: 15px 40px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        .tema-central {
+            font-size: 3rem;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        /* --- SLIDE 3: OBJETIVO --- */
+        .frase-objetivo {
+            font-size: 2.2rem;
+            color: var(--gris-texto);
+            text-align: center;
+            max-width: 85%;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        /* --- SLIDES 4-N: CONTENIDO (REGLA MÁX 6 BULLETS) --- */
+        .bullets-list {
+            list-style: none;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .bullets-list li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .bullets-list li::before {
+            content: "■";
+            color: var(--azul-acento);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.2rem;
+        }
+
+        /* CAJAS DE RECOMENDACIÓN */
+        .caja-recomendacion {
+            background-color: var(--fondo-caja);
+            border-left: 6px solid var(--azul-principal);
+            padding: 20px 30px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .caja-recomendacion p {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+        }
+
+        /* --- SLIDE ACTIVIDADES --- */
+        .actividades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .cuadro-actividad {
+            background-color: var(--azul-principal);
+            color: var(--blanco);
+            padding: 25px;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .cuadro-actividad h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding-bottom: 5px;
+        }
+
+        /* --- SLIDE CIERRE ACADÉMICO --- */
+        .cierre-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .seccion-tarea, .seccion-bibliografia {
+            background-color: var(--blanco);
+        }
+
+        .seccion-tarea h3, .seccion-bibliografia h3 {
+            color: var(--azul-principal);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .apa-style {
+            font-size: 1.1rem;
+            padding-left: 20px;
+            text-indent: -20px;
+            margin-bottom: 10px;
+        }
+
+        /* --- SLIDE FINAL --- */
+        .gracias-text {
+            font-size: 8rem;
+            font-weight: 900;
+            color: var(--azul-principal);
+            letter-spacing: -2px;
+            animation: pulse 2s infinite alternate;
+        }
+
+        /* --- BOTÓN DE NAVEGACIÓN DE GITHUB (OPCIONAL) --- */
+        .nav-instrucciones {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(26, 26, 26, 0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Ajustes de Impresión / Proyección */
+        @media (max-width: 768px) {
+            .portada-layout { flex-direction: column; text-align: center; }
+            .sesion-badge { text-align: center; font-size: 4rem; }
+            .titulo-clase-container { border-left: none; border-top: 5px solid var(--azul-acento); padding-left: 0; padding-top: 20px; }
+            .titulo-clase-container h1 { font-size: 2.2rem; }
+            .cierre-layout { grid-template-columns: 1fr; }
+            .gracias-text { font-size: 5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logo Institucional Obligatorio (Esquina Superior Derecha) -->
+    <img src="https://vinculacion.ecotec.edu.ec/wp-content/uploads/2026/04/ecotec-site-icon-1.webp" alt="Ecotec Logo" class="logo-ecotec">
+
+    <!-- Indicador de Navegación Scrolleable -->
+    <div class="nav-instrucciones">Desplaza hacia abajo para ver los slides ↓</div>
+
+    <!-- ==========================================
+         SLIDE 1: PORTADA
+         ========================================== -->
+    <section class="slide-container">
+        <div class="portada-layout">
+            <div class="sesion-badge">S1.1</div>
+            <div class="titulo-clase-container">
+                <h1>Programa Global de Emprendimiento (GEM)</h1>
+                <div class="subtitulo-curso">Curso de Emprendedores</div>
+            </div>
+        </div>
+        
+        <!-- Footer Institucional Obligatorio -->
+        <div class="footer-institucional">
+            f @universidadecotec | 📷 uecotec
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         SLIDE 2: UNIDAD
+         ========================================== -->
+    <section class="slide-container">
+        <div class="badge-unidad">Unidad I</div>
+        <h2 class="tema-central">Fundamentos y Ecosistema del Emprendimiento Global</h2>
+        
+        <div class="footer-institucional">
+            f @universidadecotec | 📷 uecotec
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         SLIDE 3: OBJETIVO DE LA SESIÓN
+         ========================================== -->
+    <section class="slide-container">
+        <h2 class="titulo-seccion">Objetivo de la Sesión</h2>
+        <p class="frase-objetivo">
+            "Capacitar a los estudiantes en la identificación de metodologías ágiles y herramientas del marco GEM para diagnosticar oportunidades de negocio sostenibles en el mercado local e internacional."
+        </p>
+        
+        <div class="footer-institucional">
+            f @universidadecotec | 📷 uecotec
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         SLIDE 4: CONTENIDO (Máx 6 Bullets)
+         ========================================== -->
+    <section class="slide-container">
+        <h2 class="titulo-seccion">El Modelo de Emprendimiento GEM</h2>
+        
+        <ul class="bullets-list">
+            <li>Análisis de las actitudes, aspiraciones y actividades emprendedoras globales.</li>
+            <li>Comprensión del indicador TEA (Tasa de Actividad Emprendedora Temprana).</li>
+            <li>Factores del entorno: Financiamiento, políticas gubernamentales y transferencia de I+D.</li>
+            <li>Identificación de motivaciones: Emprendimiento por oportunidad vs. necesidad.</li>
+            <li>Impacto socioeconómico y generación de empleo de valor agregado.</li>
+        </ul>
+
+        <!-- Caja de Recomendación / Consejo -->
+        <div class="caja-recomendacion">
+            <p>💡 Consejo Clave: Al diseñar su propuesta inicial, enfoquen los esfuerzos en resolver un problema real medible por indicadores TEA locales para asegurar tracción.</p>
+        </div>
+        
+        <div class="footer-institucional">
+            f @universidadecotec | 📷 uecotec
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         SLIDE 5: ACTIVIDADES DE CLASE
+         ========================================== -->
+    <section class="slide-container">
+        <h2 class="titulo-seccion">Actividades de Clase</h2>
+        
+        <div class="actividades-grid">
+            <div class="cuadro-actividad">
+                <h4>01. Taller de Diagnóstico</h4>
+                <p>En equipos de 4 personas, analizarán el último reporte nacional GEM y contrastarán la TEA del país frente a dos economías regionales.</p>
+            </div>
+            <div class="cuadro-actividad">
+                <h4>02. Elevator Pitch Inicial</h4>
+                <p>Presentación de 1 minuto sobre una idea de negocio basada estrictamente en una oportunidad de mercado validada.</p>
+            </div>
+        </div>
+        
+        <div class="footer-institucional">
+            f @universidadecotec | 📷 uecotec
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         SLIDE 6: CIERRE ACADÉMICO
+         ========================================== -->
+    <section class="slide-container">
+        <h2 class="titulo-seccion">Cierre Académico</h2>
+        
+        <div class="cierre-layout">
+            <div class="seccion-tarea">
+                <h3>Tarea Autónoma</h3>
+                <p>Desarrollar un mapa de empatía del cliente potencial y subir la evidencia en formato PDF a la plataforma de aprendizaje virtual antes de la Sesión 1.2.</p>
+            </div>
+            
+            <div class="seccion-bibliografia">
+                <h3>Bibliografía</h3>
+                <p class="apa-style">Amorós, J. E., & Bosma, N. (2025). <i>Global Entrepreneurship Monitor: Global Report 2024/2025</i>. Global Entrepreneurship Research Association.</p>
+                <p class="apa-style">Universidad Ecotec. (2026). <i>Guía Metodológica de Innovación y Emprendimiento Institucional</i>. Ediciones Ecotec.</p>
+            </div>
+        </div>
+        
+        <div class="footer-institucional">
+            f @universidadecotec | 📷 uecotec
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         SLIDE 7: SLIDE FINAL
+         ========================================== -->
+    <section class="slide-container">
+        <div class="gracias-text">Gracias</div>
+        
+        <div class="footer-institucional">
+            f @universidadecotec | 📷 uecotec
+        </div>
+    </section>
+
+</body>
+</html>
