@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Viabilidad Financiera: VAN y TIR</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        h1 { color: #2c3e50; margin: 0; font-size: 26px; }
+        .subtitle { color: #7f8c8d; font-size: 15px; margin: 5px 0 0 0; }
+        
+        /* Interactive Cards Grid */
+        .cards-grid {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .card {
+            flex: 1;
+            min-width: 280px;
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .card-header-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-body-text {
+            font-size: 13.5px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .card-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 10px;
+        }
+        
+        /* Status colors */
+        .status-viable { border-color: #2ecc71; background-color: #f4fbf7; }
+        .status-viable .card-value { color: #27ae60; }
+        .status-not-viable { border-color: #e74c3c; background-color: #fdf5f4; }
+        .status-not-viable .card-value { color: #c0392b; }
+
+        /* Form Controls */
+        .dashboard-layout {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .inputs-panel {
+            flex: 1;
+            min-width: 320px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .results-panel {
+            flex: 1.2;
+            min-width: 350px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 4px;
+        }
+        .help-tip {
+            font-size: 11.5px;
+            color: #7f8c8d;
+            margin-bottom: 4px;
+            display: block;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        /* Table Style */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13.5px;
+        }
+        th { background-color: #34495e; color: white; padding: 10px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
+        tr:hover td { background-color: #f8fafc; }
+
+        .conclusion-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+        }
+        .conclusion-box.viable { background: #e8f8f5; color: #1e8449; border: 1px solid #2ecc71; }
+        .conclusion-box.not-viable { background: #fceae9; color: #a93226; border: 1px solid #e74c3c; }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Evaluación Financiera Educativa: VAN y TIR</h1>
+        <p class="subtitle">Aprende cómo los inversionistas deciden si el Policlínico Samanes es rentable mediante tarjetas interactivas.</p>
+    </div>
+
+    <!-- Sección de Tarjetas de Concepto y Resultado a la vez -->
+    <h2>1. Tus Indicadores de Decisión</h2>
+    <div class="cards-grid">
+        <!-- Tarjeta del VAN -->
+        <div id="cardVAN" class="card">
+            <div class="card-header-title">💰 VAN (Valor Actual Neto)</div>
+            <div class="card-body-text">Trae todas tus ganancias futuras al día de hoy y le resta la inversión inicial. <b>Si es mayor a $0, ¡estás ganando dinero por encima de lo esperado!</b></div>
+            <div class="card-value" id="valVAN">$0.00</div>
+        </div>
+
+        <!-- Tarjeta de la TIR -->
+        <div id="cardTIR" class="card">
+            <div class="card-header-title">📈 TIR (Tasa Interna de Retorno)</div>
+            <div class="card-body-text">Es el rendimiento porcentual anual que genera tu dinero en este proyecto. <b>Debe ser mayor a la tasa de descuento para que valga la pena.</b></div>
+            <div class="card-value" id="valTIR">0.00%</div>
+        </div>
+    </div>
+
+    <!-- Panel de Control y Tabla -->
+    <h2>2. Simulador Práctico</h2>
+    <p style="font-size:14px; color:#555;">Modifica los flujos de dinero o el costo de oportunidad para ver cómo reaccionan las tarjetas en tiempo real.</p>
+    
+    <div class="dashboard-layout">
+        <!-- Izquierda: Controles del usuario -->
+        <div class="inputs-panel">
+            <h3 style="margin-top:0; font-size:16px; color:#2c3e50;">Datos del Proyecto</h3>
+            
+            <div class="input-group">
+                <label for="invInicial">Inversión Inicial (Año 0)</label>
+                <span class="help-text help-tip">Dinero necesario para abrir el policlínico (muebles, equipos).</span>
+                <input type="number" id="invInicial" value="30000" oninput="recalcularFinanzas()">
+            </div>
+
+            <div class="input-group">
+                <label for="tasaDescuento">Tasa de Descuento Anual (%)</label>
+                <span class="help-text help-tip">Lo mínimo que el inversionista exige ganar (Costo de Oportunidad).</span>
+                <input type="number" id="tasaDescuento" value="11.31" step="0.01" oninput="recalcularFinanzas()">
+            </div>
+
+            <h3 style="font-size:15px; color:#2c3e50; margin-top:20px;">Ganancias Netas Proyectadas (Flujos)</h3>
+            <span class="help-tip" style="margin-bottom:10px;">Dinero libre al final de cada año tras pagar costos e impuestos:</span>
+            
+            <div class="input-group">
+                <label>Año 2025 (Año 1):</label>
+                <input type="number" id="f1" value="19313" oninput="recalcularFinanzas()">
+            </div>
+            <div class="input-group">
+                <label>Año 2026 (Año 2):</label>
+                <input type="number" id="f2" value="19814" oninput="recalcularFinanzas()">
+            </div>
+            <div class="input-group">
+                <label>Año 2027 (Año 3):</label>
+                <input type="number" id="f3" value="20290" oninput="recalcularFinanzas()">
+            </div>
+            <div class="input-group">
+                <label>Año 2028 (Año 4):</label>
+                <input type="number" id="f4" value="20741" oninput="recalcularFinanzas()">
+            </div>
+            <div class="input-group">
+                <label>Año 2029 (Año 5):</label>
+                <input type="number" id="f5" value="21168" oninput="recalcularFinanzas()">
+            </div>
+        </div>
+
+        <!-- Derecha: Desglose y Conclusión -->
+        <div class="results-panel">
+            <h3 style="margin-top:0; font-size:16px; color:#2c3e50;">Tabla de Valor del Dinero en el Tiempo</h3>
+            <p style="font-size:13px; color:#666;">El dinero del futuro vale menos hoy. Mira cómo se "descuenta" año a año:</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Año</th>
+                        <th>Flujo Esperado</th>
+                        <th>Valor Traído a Hoy</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaFlujos">
+                    <!-- Dinámico -->
+                </tbody>
+            </table>
+
+            <div id="conclusion" class="conclusion-box">
+                Cargando análisis...
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Casos Prácticos de Finanzas Básicas | Policlínico Samanes &copy; 2026
+    </div>
+</div>
+
+<script>
+// Función para calcular la TIR de forma numérica (Método de Newton-Raphson aproximado)
+function calcularTIR(inversion, flujos) {
+    let r = 0.1; // Estimación inicial del 10%
+    for (let i = 0; i < 100; i++) {
+        let npv = -inversion;
+        let derivative = 0;
+        for (let t = 0; t < flujos.length; t++) {
+            npv += flujos[t] / Math.pow(1 + r, t + 1);
+            derivative -= (t + 1) * flujos[t] / Math.pow(1 + r, t + 2);
+        }
+        let diff = npv / derivative;
+        r = r - diff;
+        if (Math.abs(diff) < 0.00001) return r * 100;
+    }
+    return r * 100;
+}
+
+function recalcularFinanzas() {
+    // 1. Capturar datos ingresados
+    const inversion = parseFloat(document.getElementById('invInicial').value) || 0;
+    const tasaPct = parseFloat(document.getElementById('tasaDescuento').value) || 0;
+    const r = tasaPct / 100;
+
+    const flujos = [
+        parseFloat(document.getElementById('f1').value) || 0,
+        parseFloat(document.getElementById('f2').value) || 0,
+        parseFloat(document.getElementById('f3').value) || 0,
+        parseFloat(document.getElementById('f4').value) || 0,
+        parseFloat(document.getElementById('f5').value) || 0
+    ];
+
+    // 2. Calcular el VAN
+    let sumaValoresActuales = 0;
+    let filasHtml = "";
+
+    flujos.forEach((flujo, index) => {
+        let anio = index + 1;
+        // Fórmula del descuento: Flujo / (1 + r)^t
+        let valorActual = flujo / Math.pow(1 + r, anio);
+        sumaValoresActuales += valorActual;
+
+        filasHtml += `<tr>
+            <td>Año ${anio}</td>
+            <td>$${flujo.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            <td>$${valorActual.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+        </tr>`;
+    } );
+
+    const vanFinal = sumaValoresActuales - inversion;
+
+    // 3. Calcular la TIR
+    const tirFinal = calcularTIR(inversion, flujos);
+
+    // 4. Actualizar la interfaz
+    document.getElementById('tablaFlujos').innerHTML = filasHtml;
+    document.getElementById('valVAN').innerText = `$${vanFinal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    
+    if (!isNaN(tirFinal) && isFinite(tirFinal)) {
+        document.getElementById('valTIR').innerText = `${tirFinal.toFixed(2)}%`;
+    } else {
+        document.getElementById('valTIR').innerText = "N/D";
+    }
+
+    // 5. Lógica de colores interactivos (Viabilidad)
+    const cardVAN = document.getElementById('cardVAN');
+    const cardTIR = document.getElementById('cardTIR');
+    const conclusion = document.getElementById('conclusion');
+
+    if (vanFinal >= 0 && tirFinal >= tasaPct) {
+        cardVAN.className = "card status-viable";
+        cardTIR.className = "card status-viable";
+        conclusion.className = "conclusion-box viable";
+        conclusion.innerHTML = `🟢 ¡PROYECTO VIABLE! El VAN es positivo ($${Math.round(vanFinal).toLocaleString()}) y la TIR (${tirFinal.toFixed(1)}%) supera lo que pides ganar (${tasaPct}%). Vale la pena invertir.`;
+    } else {
+        cardVAN.className = "card status-not-viable";
+        cardTIR.className = "card status-not-viable";
+        conclusion.className = "conclusion-box not-viable";
+        conclusion.innerHTML = `🔴 NO VIABLE: El proyecto no rinde lo suficiente bajo estas condiciones. Intenta bajar la inversión o subir las ganancias.`;
+    }
+}
+
+// Inicializar la simulación
+recalcularFinanzas();
+</script>
+</body>
+</html>
