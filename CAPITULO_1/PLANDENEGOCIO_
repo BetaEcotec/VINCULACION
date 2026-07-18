@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Unificado - Curso de Emprendedores GEM | ECOTEC</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary-dark: #0A2540;
+            --primary-blue: #1E5FA6;
+            --accent-orange: #FF8C42;
+            --accent-gold: #fbbf24;
+            --bg-soft: #F8F9FA;
+            --success: #10b981;
+            --danger: #ef4444;
+            --sky: #0ea5e9;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-soft);
+            color: #1E293B;
+        }
+
+        /* --- Estilos RPG / Mini Juegos --- */
+        .mapa-rpg {
+            position: relative;
+            background: #111827;
+            border: 2px solid var(--accent-gold);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+        .nodo-mision {
+            transition: 0.3s;
+        }
+        .nodo-mision.active {
+            background: var(--sky);
+            border-color: white;
+            box-shadow: 0 0 15px var(--sky);
+            transform: scale(1.1);
+        }
+        .nodo-mision.complete {
+            background: var(--success);
+            border-color: white;
+        }
+        
+        .game-container { position: relative; width: 100%; height: 250px; background: #000; border-radius: 12px; overflow: hidden; border: 2px solid #334155; }
+        .obstaculo { position: absolute; font-size: 20px; animation: caer linear forwards; }
+        @keyframes caer { from { transform: translateY(-50px); } to { transform: translateY(300px); } }
+
+        .puzzle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 280px; height: 280px; margin: 15px auto; background: #1e293b; padding: 5px; border-radius: 8px; }
+        .piece { width: 100%; height: 100%; background: var(--sky); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; color: white; text-shadow: 1px 1px 2px black; }
+        .piece.locked { filter: grayscale(1) brightness(0.3); background: #475569 !important; border: 1px dashed var(--danger); }
+        .piece.empty { background: transparent !important; border: none; }
+
+        /* Estilos 3D */
+        .perspective-container { perspective: 1000px; }
+        .cube-3d { transform-style: preserve-3d; transition: transform 0.5s; }
+        .cube-face { backface-visibility: hidden; }
+        .cube-face-back { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Barra de progreso superior fija -->
+    <div class="fixed top-0 left-0 w-full h-1.5 bg-slate-200 z-50">
+        <div id="topProgressBar" class="h-full bg-blue-600 w-1/5 transition-all duration-500"></div>
+    </div>
+
+    <!-- CABECERA INSTITUCIONAL -->
+    <header class="bg-white border-b border-slate-100 shadow-sm sticky top-1 z-40 px-6 py-4 flex justify-between items-center backdrop-blur-md bg-white/90">
+        <div>
+            <span class="text-xs font-bold tracking-widest uppercase bg-[#FF8C42] px-3 py-1 rounded-full text-white">Ecosistema 2026</span>
+            <div class="text-xs text-slate-500 font-semibold mt-1">Dirección de Vinculación con la Sociedad</div>
+        </div>
+        <img src="https://vinculacion.ecotec.edu.ec/wp-content/uploads/2026/04/ecotec-site-icon-1.webp" alt="Ecotec Logo" class="h-12 w-auto object-contain">
+    </header>
+
+    <!-- MAIN DASHBOARD -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8 space-y-12">
+
+        <!-- SECCIÓN 1: PORTADA INTEGRADA -->
+        <section class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-100 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+            <div class="absolute -right-16 -top-16 w-48 h-48 bg-blue-50 rounded-full blur-3xl"></div>
+            <div class="text-center md:text-right font-extrabold text-5xl md:text-7xl text-[#1E5FA6] md:border-r-4 border-[#2D6DB5] md:pr-8 leading-none md:w-1/4">
+                S1.1
+            </div>
+            <div class="flex-1 space-y-4 text-center md:text-left">
+                <div class="text-xs font-bold uppercase tracking-widest text-[#2D6DB5]">Programa de Vinculación / Módulo Principal</div>
+                <h1 class="text-3xl md:text-5xl font-extrabold text-[#0A2540] leading-tight">
+                    Curso de Emprendedores<br>
+                    <span class="text-[#1E5FA6]">Global Entrepreneurship Monitor (GEM)</span>
+                </h1>
+                <p class="text-slate-600 max-w-2xl text-base md:text-lg">
+                    Fortalecimiento institucional, modelos de negocio e indicadores de actividad emprendedora a nivel global y local aplicados a la provincia del Guayas, Ecuador.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: BIENVENIDA, FACTOR HUMANO Y MULTIMEDIA -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-[#0A2540] mb-2">1. Introducción y Transformación Tecnológica</h2>
+                    <p class="text-slate-600 mb-6">Explora los fundamentos de la transición crítica desde una economía de supervivencia hacia una estructura formal y escalable.</p>
+                </div>
+                
+                <!-- SUSTITUCIÓN: IMAGEN EN LUGAR DE VIDEO -->
+                <div class="aspect-video w-full rounded-xl overflow-hidden shadow-md border border-slate-200 mb-4 bg-slate-100 relative group">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                         alt="Estrategia y Análisis" 
+                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
+                        <span class="text-white font-bold text-lg">Hacia una economía formal y competitiva</span>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-blue-50 rounded-xl border-l-4 border-[#1E5FA6] text-sm text-slate-700">
+                    <strong>La Guía del Emprendedor:</strong> Actúa como un asistente interactivo alimentado por modelos generativos de IA, adaptado completamente al entorno fiscal de Ecuador. Target: +5,000 emprendedores.
+                </div>
+            </div>
+
+            <!-- Columna lateral: Testimonio Humano y Herramientas -->
+            <div class="space-y-6">
+                <!-- Historia -->
+                <div class="bg-amber-50/60 p-6 rounded-2xl border-l-4 border-[#FF8C42] space-y-4 shadow-sm">
+                    <span class="text-xs font-bold uppercase px-2 py-1 bg-[#FF8C42] text-white rounded">El Factor Humano</span>
+                    <h3 class="font-bold text-slate-900 text-lg">La historia de Doña Rosa</h3>
+                    <p class="text-sm italic text-slate-700 leading-relaxed">
+                        "Antes de que los chicos de ECOTEC llegaran, yo pensaba que mi negocio era muy pequeño para llevar cuentas. Ahora, tengo mi primer registro de ventas y sé cuánto puedo ahorrar cada mes."
+                    </p>
+                    <strong class="block text-xs text-slate-900">- Rosa M., Emprendedora local de Guayas.</strong>
+                </div>
+
+                <!-- Comparativa Rápida -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-bold text-[#0A2540]">Modelo de Cambio Organizacional</h3>
+                    <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                        <div class="p-3 bg-red-50 rounded-xl border border-red-100">
+                            <span class="text-xl">😵‍💫</span>
+                            <div class="font-bold text-red-800 mt-1">Sin Orden</div>
+                            <p class="text-[10px] text-red-600 mt-1">Caja mezclada, cuentas empíricas, flujo incierto.</p>
+                        </div>
+                        <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                            <span class="text-xl">🤩</span>
+                            <div class="font-bold text-emerald-800 mt-1">Vinculado</div>
+                            <p class="text-[10px] text-emerald-600 mt-1">Cuentas claras, canales digitales, metas fijas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: MARCO ORGANIZACIONAL, MÉTRICAS Y SIMULADOR EXCEL -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Formulario Excel Dinámico -->
+            <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-[#0A2540] mb-2">2. Proyección Financiera Dinámica (Estilo Excel)</h2>
+                    <p class="text-slate-600 text-sm">Modifica los valores de las celdas en color verde (<span class="bg-emerald-50 text-emerald-800 font-mono px-1 rounded">input</span>) para simular el Flujo Neto Efectivo (FNE) y actualizar el gráfico en tiempo real.</p>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse border border-slate-200 text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-700 font-bold">
+                                <th class="border border-slate-200 p-3">Concepto Financiero</th>
+                                <th class="border border-slate-200 p-3 text-center w-28">Año 1</th>
+                                <th class="border border-slate-200 p-3 text-center w-28">Año 2</th>
+                                <th class="border border-slate-200 p-3 text-center w-28">Año 3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-slate-200 p-3 font-medium bg-slate-50/50">(+) Ingresos Operativos</td>
+                                <td class="border border-slate-200 p-1">
+                                    <input type="number" id="ing1" value="220425" class="w-full bg-emerald-50 text-right p-2 font-mono rounded border border-emerald-200 text-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-400" oninput="recalcularFinanzas()">
+                                </td>
+                                <td class="border border-slate-200 p-1">
+                                    <input type="number" id="ing2" value="223625" class="w-full bg-emerald-50 text-right p-2 font-mono rounded border border-emerald-200 text-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-400" oninput="recalcularFinanzas()">
+                                </td>
+                                <td class="border border-slate-200 p-1">
+                                    <input type="number" id="ing3" value="226925" class="w-full bg-emerald-50 text-right p-2 font-mono rounded border border-emerald-200 text-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-400" oninput="recalcularFinanzas()">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-200 p-3 font-medium bg-slate-50/50">(-) Costos Totales</td>
+                                <td class="border border-slate-200 p-1">
+                                    <input type="number" id="cost1" value="88170" class="w-full bg-emerald-50 text-right p-2 font-mono rounded border border-emerald-200 text-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-400" oninput="recalcularFinanzas()">
+                                </td>
+                                <td class="border border-slate-200 p-1">
+                                    <input type="number" id="cost2" value="89450" class="w-full bg-emerald-50 text-right p-2 font-mono rounded border border-emerald-200 text-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-400" oninput="recalcularFinanzas()">
+                                </td>
+                                <td class="border border-slate-200 p-1">
+                                    <input type="number" id="cost3" value="90770" class="w-full bg-emerald-50 text-right p-2 font-mono rounded border border-emerald-200 text-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-400" oninput="recalcularFinanzas()">
+                                </td>
+                            </tr>
+                            <tr class="bg-blue-50 font-bold text-blue-950">
+                                <td class="border border-slate-200 p-3">(=) Flujo Neto Efectivo (FNE)</td>
+                                <td class="border border-slate-200 p-3 text-right font-mono text-base" id="fne1">$0.00</td>
+                                <td class="border border-slate-200 p-3 text-right font-mono text-base" id="fne2">$0.00</td>
+                                <td class="border border-slate-200 p-3 text-right font-mono text-base" id="fne3">$0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Gráfico de Rendimiento Chart.js -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
+                <h4 class="text-xs uppercase font-bold tracking-wider text-slate-400 text-center mb-4">Gráfico Dinámico de Flujos</h4>
+                <div class="w-full h-56 relative">
+                    <canvas id="financialChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: MINI JUEGO GAMIFICADO DE RUTA (CYBER-CONTADOR) -->
+        <section class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-[#0A2540] mb-1">3. Odisea Financiera: Cyber-Contador v4</h2>
+                <p class="text-slate-600 text-sm">Supera las misiones interactivas para consolidar tus conocimientos de blindaje legal, flujos y punto de equilibrio.</p>
+            </div>
+
+            <!-- Mapa de Ruta RPG -->
+            <div class="mapa-rpg w-full h-24 rounded-2xl relative overflow-hidden flex items-center justify-around px-4">
+                <div class="absolute w-4/5 h-0.5 bg-slate-700 top-1/2 left-10 -translate-y-1/2 z-0 border-t border-dashed border-amber-400/40"></div>
+                <div id="avatar-explorador" class="absolute top-4 left-[8%] text-2xl transition-all duration-500 z-20">🚀</div>
+                
+                <div id="nodo1" class="nodo-mision w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-600 text-white font-bold flex items-center justify-center text-sm z-10 active">1</div>
+                <div id="nodo2" class="nodo-mision w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-600 text-white font-bold flex items-center justify-center text-sm z-10">2</div>
+                <div id="nodo3" class="nodo-mision w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-600 text-white font-bold flex items-center justify-center text-sm z-10">3</div>
+                <div id="nodo4" class="nodo-mision w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-600 text-white font-bold flex items-center justify-center text-sm z-10">4</div>
+            </div>
+
+            <!-- CONTENEDORES DE LAS PANTALLAS DEL JUEGO -->
+            <div class="border border-slate-100 rounded-2xl p-6 bg-slate-50/50 min-h-[320px] flex flex-col justify-center">
+                
+                <!-- MISION 1 -->
+                <div id="pantalla1" class="pantalla-juego space-y-4">
+                    <div class="flex justify-between items-center text-sm font-bold bg-white p-3 rounded-xl shadow-sm border border-slate-100">
+                        <span>Salud Financiera: <span id="m1-salud" class="text-emerald-500">100%</span></span>
+                        <span>Progreso Misión: <span id="m1-progreso" class="text-blue-500">0%</span></span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-slate-800">🛡️ Misión 1: Blindaje de Caja Chica</h3>
+                        <p class="text-xs text-slate-500">Usa los botones o haz clic para mover el módulo espacial. Esquiva las pérdidas (💸) y recolecta utilidades (💰).</p>
+                    </div>
+                    
+                    <div class="game-container" id="game1">
+                        <div id="jugador-m1" class="absolute bottom-3 left-1/2 -translate-x-1/2 text-3xl z-10 duration-75">🛸</div>
+                    </div>
+                    
+                    <div class="flex gap-4">
+                        <button class="bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-lg active:bg-slate-700" onclick="moverJugador(-10)">◀ Izquierda</button>
+                        <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm py-2.5 rounded-lg transition-colors" onclick="iniciarMision1()">Comenzar Desafío</button>
+                        <button class="bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-lg active:bg-slate-700" onclick="moverJugador(10)">Derecha ▶</button>
+                    </div>
+                </div>
+
+                <!-- MISION 2 -->
+                <div id="pantalla2" class="pantalla-juego hidden space-y-4">
+                    <h3 class="font-bold text-lg text-slate-800">⚖️ Misión 2: Estructura Jurídica y Mitigación de Riesgos</h3>
+                    <p class="text-sm text-slate-600">Tu microempresa está creciendo exponencialmente en Guayaquil. Para proteger tu patrimonio personal (casa, auto) ante pasivos del negocio, ¿cuál estructura legal es la idónea en el ecosistema actual de Ecuador?</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        <button class="p-4 bg-white hover:bg-blue-50 text-left rounded-xl border border-slate-200 transition-all font-semibold text-sm shadow-sm" onclick="completarMision2()">
+                            • S.A.S. (Sociedad de Acciones Simplificadas)
+                        </button>
+                        <button class="p-4 bg-white hover:bg-red-50 text-left rounded-xl border border-slate-200 transition-all font-semibold text-sm shadow-sm" onclick="alert('Riesgo alto: Como Persona Natural con RUC respondes de manera ilimitada con tus bienes personales.')">
+                            • Persona Natural con RUC / RIMPE
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MISION 3 -->
+                <div id="pantalla3" class="pantalla-juego hidden space-y-4 text-center">
+                    <div class="text-left">
+                        <h3 class="font-bold text-lg text-slate-800">🧩 Misión 3: El Rompecabezas Contable</h3>
+                        <p class="text-xs text-slate-500">Ordena los números de forma secuencial. Las piezas marcadas con un candado (🔒) requieren resolver un reto financiero rápido para desbloquearse.</p>
+                    </div>
+                    
+                    <div class="puzzle-grid mx-auto" id="puzzleBoard"></div>
+
+                    <!-- Modal Desbloqueo Matemático Interno -->
+                    <div id="mathModal" class="hidden bg-slate-900 border border-amber-400 rounded-xl p-4 space-y-3 max-w-xs mx-auto text-white">
+                        <h4 class="font-bold text-amber-400 text-sm">🔓 Desbloqueo Analítico</h4>
+                        <p id="mathQuestion" class="text-xs text-slate-300"></p>
+                        <input type="number" id="mathAnswer" class="bg-slate-800 border border-slate-600 rounded p-1 text-center text-white w-full text-sm">
+                        <button class="w-full bg-amber-400 text-slate-950 font-bold text-xs py-2 rounded" onclick="checkMathAnswer()">Validar Respuesta</button>
+                    </div>
+                </div>
+
+                <!-- MISION 4 -->
+                <div id="pantalla4" class="pantalla-juego hidden space-y-4 text-center py-6">
+                    <span class="text-5xl">🏆</span>
+                    <h3 class="text-2xl font-extrabold text-emerald-600">¡Socio Fundador Certificado!</h3>
+                    <p class="text-slate-600 max-w-md mx-auto text-sm">Has dominado con éxito el control de flujos de caja, las estructuras legales recomendadas por la SUPERCIAS y el análisis de equilibrio financiero.</p>
+                    <button class="bg-[#1E5FA6] hover:bg-blue-700 text-white font-bold text-sm px-6 py-2.5 rounded-xl transition-colors" onclick="reiniciarJuego()">Reiniciar Odisea</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: CARD GRID 3D Y ROMPECABEZAS DRAG-AND-DROP COMERCIAL -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Pilares 3D Interactivos -->
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-[#0A2540] mb-2">4. Pilares Estratégicos de Inversión</h2>
+                    <p class="text-slate-600 text-sm mb-6">Haz clic sobre las tarjetas tridimensionales para rotarlas y revelar sus planes críticos de mitigación.</p>
+                    
+                    <div class="perspective-container py-4 flex flex-wrap justify-center gap-6">
+                        <!-- Bloque 3D 1 -->
+                        <div class="w-40 h-44 cursor-pointer" onclick="rotateCube(this)">
+                            <div class="cube-3d relative w-full h-full text-center shadow-md rounded-xl">
+                                <div class="cube-face absolute inset-0 bg-gradient-to-br from-blue-700 to-blue-900 text-white rounded-xl flex flex-col items-center justify-center p-4 border border-blue-950">
+                                    <span class="text-3xl mb-2">📊</span>
+                                    <h4 class="font-bold text-sm">Sensibilidad</h4>
+                                    <p class="text-[10px] text-blue-200 mt-2">Van Westendorp</p>
+                                </div>
+                                <div class="cube-face cube-face-back absolute inset-0 bg-[#FF8C42] text-white rounded-xl flex flex-col items-center justify-center p-4 border border-orange-600">
+                                    <h4 class="font-bold text-xs uppercase">Mitigación</h4>
+                                    <p class="text-[11px] mt-2 leading-snug">Medición ágil de elasticidad ante fluctuaciones de precios del mercado local.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bloque 3D 2 -->
+                        <div class="w-40 h-44 cursor-pointer" onclick="rotateCube(this)">
+                            <div class="cube-3d relative w-full h-full text-center shadow-md rounded-xl">
+                                <div class="cube-face absolute inset-0 bg-gradient-to-br from-blue-700 to-blue-900 text-white rounded-xl flex flex-col items-center justify-center p-4 border border-blue-950">
+                                    <span class="text-3xl mb-2">🛡️</span>
+                                    <h4 class="font-bold text-sm">Blindaje Jurídico</h4>
+                                    <p class="text-[10px] text-blue-200 mt-2">Constitución S.A.S.</p>
+                                </div>
+                                <div class="cube-face cube-face-back absolute inset-0 bg-[#FF8C42] text-white rounded-xl flex flex-col items-center justify-center p-4 border border-orange-600">
+                                    <h4 class="font-bold text-xs uppercase">Mitigación</h4>
+                                    <p class="text-[11px] mt-2 leading-snug">Separación formal de capitales para salvaguardar activos de la familia.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center text-[11px] text-slate-400 mt-4">🖱️ Haz clic sobre cada bloque para voltearlo 180°.</p>
+            </div>
+
+            <!-- Rompecabezas de Alineación Comercial -->
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-[#0A2540] mb-2">5. Ciclo de Conversión Omnicanal</h2>
+                    <p class="text-slate-600 text-sm mb-4">Intercambia o haz clic para reordenar las piezas y restablecer el embudo de conversión ideal.</p>
+                    
+                    <div id="puzzle-container" class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300">
+                        <div draggable="true" id="piece-3" data-order="3" class="puzzle-piece p-3 bg-blue-50 border border-blue-200 rounded-lg text-center font-semibold text-[#0A2540] text-xs cursor-move hover:bg-blue-100 transition-colors">3. Llamado a la Acción</div>
+                        <div draggable="true" id="piece-1" data-order="1" class="puzzle-piece p-3 bg-blue-50 border border-blue-200 rounded-lg text-center font-semibold text-[#0A2540] text-xs cursor-move hover:bg-blue-100 transition-colors">1. Atracción / Review</div>
+                        <div draggable="true" id="piece-4" data-order="4" class="puzzle-piece p-3 bg-blue-50 border border-blue-200 rounded-lg text-center font-semibold text-[#0A2540] text-xs cursor-move hover:bg-blue-100 transition-colors">4. Conversión Monetaria</div>
+                        <div draggable="true" id="piece-2" data-order="2" class="puzzle-piece p-3 bg-blue-50 border border-blue-200 rounded-lg text-center font-semibold text-[#0A2540] text-xs cursor-move hover:bg-blue-100 transition-colors">2. Presentación de Casos</div>
+                    </div>
+                </div>
+                <div id="puzzle-message" class="text-center text-xs font-bold text-amber-600 mt-4">Estado: Embudo desalineado. ¡Arrastra o haz clic para ordenar!</div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: PLAN DE ACCIÓN, CRONOGRAMA Y ENCUESTA DIAGNÓSTICA -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Tabla de Entregables -->
+            <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+                <h2 class="text-2xl font-bold text-[#0A2540]">6. Plan de Acción y Cronograma de Entregables</h2>
+                <div class="overflow-x-auto rounded-xl border border-slate-100">
+                    <table class="w-full text-left border-collapse text-xs md:text-sm">
+                        <thead>
+                            <tr class="bg-[#0A2540] text-white">
+                                <th class="p-3 font-semibold">Fase del Proyecto</th>
+                                <th class="p-3 font-semibold">Acción Concreta</th>
+                                <th class="p-3 font-semibold">Entregable Generado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 bg-white text-slate-700">
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-bold text-slate-900">01. Planificación</td>
+                                <td class="p-3">Asignación de roles internos y cronogramas.</td>
+                                <td class="p-3"><span class="px-2 py-0.5 bg-slate-100 rounded text-slate-800 font-medium">Marco Referencial</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-bold text-slate-900">02. Investigación</td>
+                                <td class="p-3">Diseño y validación de encuestas diagnósticas.</td>
+                                <td class="p-3"><span class="px-2 py-0.5 bg-slate-100 rounded text-slate-800 font-medium">Cuestionario Validado</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-bold text-slate-900">03. Desarrollo</td>
+                                <td class="p-3">Estructuración didáctica de manuales adaptados.</td>
+                                <td class="p-3"><span class="px-2 py-0.5 bg-slate-100 rounded text-slate-800 font-medium">Guías de Capacitación</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-bold text-slate-900">04. Herramientas</td>
+                                <td class="p-3">Programación de simuladores financieros ágiles.</td>
+                                <td class="p-3"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded font-bold">Matrices Automatizadas</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Formulario de Encuesta Diagnóstica Corta -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div class="space-y-4">
+                    <h3 class="font-bold text-[#0A2540] text-lg">7. Autodiagnóstico de Madurez</h3>
+                    <form id="diagnosticSurvey" class="space-y-4" onsubmit="evaluateSurvey(event)">
+                        <div class="space-y-1">
+                            <label class="block font-medium text-xs text-slate-600">Estatus Legal Actual:</label>
+                            <select id="q1" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option value="0">Informalidad total / Sin registros</option>
+                                <option value="1">Persona Natural (RUC / RIMPE)</option>
+                                <option value="2">Sociedad Constituida (S.A.S.)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block font-medium text-xs text-slate-600">Gestión de Flujo de Caja:</label>
+                            <select id="q2" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option value="0">No se registra o se mezcla con gastos del hogar</option>
+                                <option value="1">Uso de plantillas básicas manuales/Excel</option>
+                                <option value="2">Estructura contable formal (KPIs financieros)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full bg-[#0A2540] hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-lg transition-colors">
+                            Enviar Diagnóstico
+                        </button>
+                    </form>
+                </div>
+                <div id="surveyResult" class="hidden mt-4 p-3 rounded-xl text-xs font-medium border transition-all"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER INSTITUCIONAL UNIFICADO -->
+    <footer class="bg-[#0A2540] text-slate-400 text-center py-8 px-6 text-xs border-t border-slate-800 mt-12 space-y-2">
+        <p class="font-bold text-white text-sm">© 2026 Universidad ECOTEC - Dirección de Vinculación con la Sociedad</p>
+        <p class="text-slate-400">Programa de Transformación Tecnológica y Competitividad Microempresarial bajo Indicadores GEM</p>
+        <p class="text-slate-500">Provincia del Guayas, Ecuador | f @universidadecotec | 📷 uecotec</p>
+    </footer>
+
+    <!-- LOGICA JAVASCRIPT GLOBAL -->
+    <script>
+        // 1. RECALCULO DE SPREADSHEET Y CHART.JS
+        let financialChart;
+        
+        function initChart() {
+            const ctx = document.getElementById('financialChart').getContext('2d');
+            financialChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Año 1', 'Año 2', 'Año 3'],
+                    datasets: [{
+                        label: 'Flujo Neto Efectivo ($)',
+                        data: [0, 0, 0],
+                        backgroundColor: 'rgba(30, 95, 166, 0.85)',
+                        borderColor: 'rgba(30, 95, 166, 1)',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+            recalcularFinanzas();
+        }
+
+        function recalcularFinanzas() {
+            const ing1 = parseFloat(document.getElementById('ing1').value) || 0;
+            const ing2 = parseFloat(document.getElementById('ing2').value) || 0;
+            const ing3 = parseFloat(document.getElementById('ing3').value) || 0;
+
+            const cost1 = parseFloat(document.getElementById('cost1').value) || 0;
+            const cost2 = parseFloat(document.getElementById('cost2').value) || 0;
+            const cost3 = parseFloat(document.getElementById('cost3').value) || 0;
+
+            const fne1 = ing1 - cost1;
+            const fne2 = ing2 - cost2;
+            const fne3 = ing3 - cost3;
+
+            document.getElementById('fne1').innerText = `$${fne1.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+            document.getElementById('fne2').innerText = `$${fne2.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+            document.getElementById('fne3').innerText = `$${fne3.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+
+            if (financialChart) {
+                financialChart.data.datasets[0].data = [fne1, fne2, fne3];
+                financialChart.update();
+            }
+        }
+
+        // 2. GIRO 3D
+        function rotateCube(element) {
+            const cube = element.querySelector('.cube-3d');
+            cube.style.transform = (cube.style.transform === "rotateY(180deg)") ? "rotateY(0deg)" : "rotateY(180deg)";
+        }
+
+        // 3. JUEGO RPG ODYSSEY (CYBER-CONTADOR)
+        let gameActive = false;
+        let saludM1 = 100;
+        let progresoM1 = 0;
+        let posJugador = 50;
+
+        function moverJugador(offset) {
+            posJugador = Math.max(5, Math.min(95, posJugador + offset));
+            document.getElementById('jugador-m1').style.left = posJugador + "%";
+        }
+
+        function irANodo(n) {
+            const pct = (n / 4) * 100;
+            document.getElementById('topProgressBar').style.width = pct + "%";
+            
+            const positions = ["8%", "33%", "58%", "83%"];
+            document.getElementById('avatar-explorador').style.left = positions[n-1];
+            
+            document.querySelectorAll('.pantalla-juego').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`pantalla${n}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.nodo-mision').forEach((nodo, i) => {
+                if(i < n-1) nodo.className = "nodo-mision w-10 h-10 rounded-full bg-emerald-500 border-2 border-white text-white font-bold flex items-center justify-center text-sm z-10 complete";
+                else if(i === n-1) nodo.className = "nodo-mision w-10 h-10 rounded-full bg-blue-500 border-2 border-white text-white font-bold flex items-center justify-center text-sm z-10 active";
+                else nodo.className = "nodo-mision w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-600 text-white font-bold flex items-center justify-center text-sm z-10";
+            });
+
+            if(n === 3) initPuzzleGame();
+        }
+
+        function iniciarMision1() {
+            if(gameActive) return;
+            gameActive = true;
+            saludM1 = 100; progresoM1 = 0;
+            
+            const interval = setInterval(() => {
+                if(!gameActive) { clearInterval(interval); return; }
+                
+                spawnObstacle();
+                progresoM1 += 5;
+                document.getElementById('m1-progreso').innerText = progresoM1 + "%";
+
+                if(progresoM1 >= 100) {
+                    gameActive = false;
+                    alert("✅ ¡Misión 1 Superada! Tu flujo de caja está protegido.");
+                    irANodo(2);
+                }
+            }, 600);
+        }
+
+        function spawnObstacle() {
+            const container = document.getElementById('game1');
+            const obs = document.createElement('div');
+            const isGood = Math.random() > 0.6;
+            obs.className = 'obstaculo';
+            obs.innerHTML = isGood ? '💰' : '💸';
+            obs.style.left = Math.random() * 90 + "%";
+            obs.style.animationDuration = "2s";
+            container.appendChild(obs);
+
+            const checkColision = setInterval(() => {
+                const r1 = obs.getBoundingClientRect();
+                const r2 = document.getElementById('jugador-m1').getBoundingClientRect();
+                
+                if (!(r1.right < r2.left || r1.left > r2.right || r1.bottom < r2.top || r1.top > r2.bottom)) {
+                    if(isGood) {
+                        saludM1 = Math.min(100, saludM1 + 5);
+                    } else {
+                        saludM1 -= 15;
+                    }
+                    document.getElementById('m1-salud').innerText = saludM1 + "%";
+                    document.getElementById('m1-salud').className = saludM1 < 40 ? "text-red-500 font-bold" : "text-emerald-500";
+                    obs.remove();
+                    clearInterval(checkColision);
+                    
+                    if(saludM1 <= 0) {
+                        gameActive = false;
+                        alert("❌ Quiebra técnica en caja chica. Inténtalo de nuevo.");
+                        irANodo(1);
+                    }
+                }
+            }, 50);
+
+            setTimeout(() => { obs.remove(); clearInterval(checkColision); }, 2000);
+        }
+
+        function completarMision2() {
+            alert("🎯 ¡Excelente decisión! La estructura de S.A.S. limita los riesgos financieros exclusivamente al capital social.");
+            irANodo(3);
+        }
+
+        // PUZZLE DE MINI RETOS NUMÉRICOS (MISION 3)
+        let puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+        let lockedPieces = [false, true, false, true, false, false, false, true, false];
+        let selectedPieceVal = -1;
+
+        const mathChallenges = [
+            { q: "Costo Fijo: $200. Margen Unitario: $10. ¿Punto de equilibrio en unidades?", a: 20 },
+            { q: "Si vendes un producto a $50 y tu costo de producción es $30, ¿cuál es tu Margen?", a: 20 },
+            { q: "Si el IVA vigente es 15%, ¿cuánto sumas de impuesto por un servicio de $100?", a: 15 }
+        ];
+
+        function initPuzzleGame() {
+            puzzleState.sort(() => Math.random() - 0.5);
+            renderPuzzleBoard();
+        }
+
+        function renderPuzzleBoard() {
+            const board = document.getElementById('puzzleBoard');
+            board.innerHTML = "";
+            puzzleState.forEach((val, idx) => {
+                const div = document.createElement('div');
+                if (val === 8) {
+                    div.className = "piece empty";
+                } else {
+                    div.className = "piece" + (lockedPieces[val] ? " locked" : "");
+                    div.innerText = lockedPieces[val] ? "🔒" : val + 1;
+                    div.onclick = () => movePuzzlePiece(idx);
+                }
+                board.appendChild(div);
+            });
+        }
+
+        function movePuzzlePiece(idx) {
+            const emptyIdx = puzzleState.indexOf(8);
+            const neighboring = [idx-1, idx+1, idx-3, idx+3].includes(emptyIdx);
+            if(!neighboring) return;
+
+            const pVal = puzzleState[idx];
+            if(lockedPieces[pVal]) {
+                selectedPieceVal = pVal;
+                const challenge = mathChallenges[Math.floor(Math.random() * mathChallenges.length)];
+                document.getElementById('mathQuestion').innerText = challenge.q;
+                document.getElementById('mathModal').dataset.answer = challenge.a;
+                document.getElementById('mathModal').classList.remove('hidden');
+                return;
+            }
+
+            puzzleState[emptyIdx] = pVal;
+            puzzleState[idx] = 8;
+            renderPuzzleBoard();
+            
+            if(puzzleState.every((v, i) => v === i)) {
+                alert("🎉 ¡Gráfico Consolidado con Éxito!");
+                irANodo(4);
+            }
+        }
+
+        function checkMathAnswer() {
+            const ans = document.getElementById('mathAnswer').value;
+            const correct = document.getElementById('mathModal').dataset.answer;
+            if(ans == correct) {
+                alert("🔓 ¡Pieza Desbloqueada!");
+                lockedPieces[selectedPieceVal] = false;
+                document.getElementById('mathModal').classList.add('hidden');
+                document.getElementById('mathAnswer').value = "";
+                renderPuzzleBoard();
+            } else {
+                alert("❌ Respuesta incorrecta. Vuelve a calcular.");
+            }
+        }
+
+        function reiniciarJuego() {
+            irANodo(1);
+        }
+
+        // 4. ROMPECABEZAS OMNICANAL COMERCIAL (DRAG & CLICK FALLBACK)
+        const puzzleContainer = document.getElementById('puzzle-container');
+        let activeDragged = null;
+
+        document.querySelectorAll('.puzzle-piece').forEach(p => {
+            p.addEventListener('dragstart', function() {
+                activeDragged = this;
+            });
+        });
+
+        puzzleContainer.addEventListener('dragover', e => e.preventDefault());
+        puzzleContainer.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const target = e.target.closest('.puzzle-piece');
+            if(target && target !== activeDragged) {
+                let tempHTML = target.innerHTML;
+                let tempOrder = target.getAttribute('data-order');
+                
+                target.innerHTML = activeDragged.innerHTML;
+                target.setAttribute('data-order', activeDragged.getAttribute('data-order'));
+                
+                activeDragged.innerHTML = tempHTML;
+                activeDragged.setAttribute('data-order', tempOrder);
+                
+                validarEmbudo();
+            }
+        });
+
+        function validarEmbudo() {
+            const current = document.querySelectorAll('.puzzle-piece');
+            let matched = true;
+            current.forEach((p, idx) => {
+                if(p.getAttribute('data-order') != (idx + 1)) matched = false;
+            });
+
+            const msg = document.getElementById('puzzle-message');
+            if(matched) {
+                msg.innerText = "🎉 ¡Perfecto! Embudo comercial completamente alineado.";
+                msg.className = "text-center text-xs font-bold text-emerald-600 mt-4";
+            } else {
+                msg.innerText = "Estado: Embudo desalineado. ¡Arrastra o haz clic para ordenar!";
+                msg.className = "text-center text-xs font-bold text-amber-600 mt-4";
+            }
+        }
+
+        // 5. ENCUESTA DIAGNÓSTICA
+        function evaluateSurvey(event) {
+            event.preventDefault();
+            const q1 = document.getElementById('q1').value;
+            const q2 = document.getElementById('q2').value;
+            const res = document.getElementById('surveyResult');
+            
+            res.className = "mt-4 p-3 rounded-xl text-xs font-medium border block transition-all";
+            
+            if (q1 === "0" || q2 === "0") {
+                res.innerText = "⚠️ Alerta de Vulnerabilidad: Alto riesgo operativo por informalidad. Se aconseja urgente regularización RIMPE y uso del Simulador de Costos ECOTEC.";
+                res.classList.add('bg-red-50', 'text-red-800', 'border-red-200');
+            } else if (q1 === "1" && q2 === "1") {
+                res.innerText = "📈 Nivel Intermedio: Cuentas con registros básicos estructurales. Te invitamos a optimizar mediante flujos predictivos de conversión omnicanal.";
+                res.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+            } else {
+                res.innerText = "💎 Estructura Robusta: Cumples con los estándares recomendados por la Guía del Emprendedor para mitigar riesgos del mercado global.";
+                res.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+            }
+        }
+
+        window.onload = function() {
+            initChart();
+        };
+    </script>
+</body>
+</html>
