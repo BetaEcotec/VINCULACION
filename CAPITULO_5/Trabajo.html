@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logística y Operaciones | Universidad Ecotec</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* MANUAL DE ESTILO ESTRICTO ECOTEC */
+        :root {
+            --azul-principal: #1E5FA6;
+            --azul-acento: #2D6DB5;
+            --negro-titulos: #1A1A1A;
+            --gris-texto: #444444;
+            --fondo-cajas: #EBF3FC;
+            --blanco: #FFFFFF;
+            --verde-exito: #28a745;
+            --dorado-acento: #f39c12;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Calibri', 'Segoe UI', sans-serif; 
+        }
+
+        body { 
+            background-color: var(--blanco); 
+            color: var(--gris-texto); 
+            overflow: hidden; 
+        }
+
+        /* LOGO Y FOOTER FIJOS */
+        .logo-ecotec {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            width: 110px;
+            z-index: 1000;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.15));
+        }
+
+        .footer-ecotec {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background-color: var(--azul-acento);
+            color: white;
+            padding: 12px 40px;
+            width: fit-content;
+            border-top-right-radius: 25px;
+            font-size: 0.85rem;
+            z-index: 1000;
+            box-shadow: 2px -2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* SISTEMA DE VISTAS (SPA) */
+        .app-view {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .app-view.active-view {
+            display: block;
+        }
+
+        /* CONTENEDOR Y SLIDES VERTICALES */
+        .slide-container {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            min-height: 100vh;
+            flex-shrink: 0;
+            padding: 80px 8% 100px 8%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* OVERLAYS PARA IMÁGENES DE FONDO */
+        .slide::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.93);
+            z-index: 1;
+        }
+
+        .slide-dark::before { 
+            background: rgba(15, 45, 80, 0.94); 
+        }
+
+        .slide-content { 
+            position: relative; 
+            z-index: 2; 
+            width: 100%; 
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ANIMACIONES Y EFECTOS DE ENTRADA */
+        .animate { 
+            opacity: 0; 
+            transform: translateY(30px); 
+            transition: 0.8s all ease; 
+        }
+        
+        .slide.active .animate { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+
+        .delay-1 { transition-delay: 0.3s; }
+        .delay-2 { transition-delay: 0.5s; }
+
+        /* TYPOGRAPHY Y COMPONENTES VISUALES */
+        .badge-chapter {
+            background: var(--azul-principal);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(30, 95, 166, 0.25);
+        }
+
+        .badge-number {
+            background: var(--azul-principal);
+            color: white;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .badge-tag {
+            background: #e1b12c;
+            color: #111;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .hero-title { 
+            font-size: 4.5rem; 
+            color: var(--azul-principal); 
+            line-height: 1.05; 
+            margin-bottom: 20px; 
+            font-weight: 800;
+        }
+
+        .sub-hero { 
+            font-size: 1.8rem; 
+            border-left: 8px solid var(--azul-acento); 
+            padding-left: 20px; 
+            color: var(--negro-titulos); 
+            max-width: 800px;
+            line-height: 1.4;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 35px; align-items: center; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+
+        .card-info {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-bottom: 5px solid var(--azul-principal);
+            height: 100%;
+        }
+
+        .card-info i { font-size: 2.2rem; color: var(--azul-acento); margin-bottom: 15px; }
+
+        .box-ia {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 18px;
+            border-radius: 12px;
+            font-family: 'Consolas', monospace;
+            border-left: 5px solid #00ffaa;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* TARJETAS INTERACTIVAS DE SELECCIÓN (MENÚ) */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+            margin-top: 30px;
+        }
+
+        .interactive-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .interactive-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 8px;
+            background: var(--azul-principal);
+            transition: height 0.3s ease;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 22px 45px rgba(30, 95, 166, 0.18);
+            border-color: var(--azul-acento);
+        }
+
+        .interactive-card:hover::before {
+            height: 12px;
+            background: var(--azul-acento);
+        }
+
+        .card-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: var(--fondo-cajas);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            transition: 0.3s ease;
+        }
+
+        .interactive-card:hover .card-icon-wrapper {
+            background: var(--azul-principal);
+            color: white;
+        }
+
+        .card-icon-wrapper i {
+            font-size: 2rem;
+            color: var(--azul-principal);
+            transition: 0.3s ease;
+        }
+
+        .interactive-card:hover .card-icon-wrapper i {
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            color: var(--azul-principal);
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .card-description {
+            font-size: 1rem;
+            color: var(--gris-texto);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .card-btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            color: var(--azul-principal);
+            font-size: 1.1rem;
+            transition: 0.3s ease;
+        }
+
+        .interactive-card:hover .card-btn-action {
+            color: var(--azul-acento);
+            transform: translateX(8px);
+        }
+
+        /* SIMULADORES Y FORMULARIOS DE EJERCICIOS */
+        .exercise-box {
+            background: var(--fondo-cajas);
+            padding: 22px;
+            border-radius: 15px;
+            border: 2px dashed var(--azul-acento);
+            margin-top: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            color: var(--azul-principal);
+            font-size: 0.9rem;
+        }
+
+        .input-control {
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-control:focus {
+            border-color: var(--azul-principal);
+            box-shadow: 0 0 5px rgba(30, 95, 166, 0.3);
+        }
+
+        .btn-calc {
+            background: var(--azul-principal);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-calc:hover {
+            background: var(--azul-acento);
+        }
+
+        .result-box {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #e8f8f5;
+            border: 1px solid #2ec4b6;
+            color: #0e6251;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* TABLAS ESTILIZADAS */
+        .table-container { overflow-x: auto; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th { background: var(--azul-principal); color: white; padding: 14px; text-align: left; font-size: 0.95rem; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        tr:nth-child(even) { background: #f8fbff; }
+
+        /* NAV & BOTONES FLOTANTES */
+        .nav-buttons { 
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            z-index: 1001; 
+        }
+
+        .btn-nav { 
+            background: var(--azul-principal); 
+            color: white; 
+            border: none; 
+            width: 55px; 
+            height: 55px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            transition: 0.4s; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(30, 95, 166, 0.3);
+            font-size: 1.2rem;
+        }
+
+        .btn-nav:hover { 
+            background: var(--azul-acento); 
+            transform: scale(1.1); 
+        }
+
+        .btn-home {
+            background: var(--dorado-acento) !important;
+        }
+
+        .progress-bar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            height: 7px; 
+            background: var(--azul-acento); 
+            z-index: 1002; 
+            transition: width 0.4s; 
+        }
+
+        /* DARK THEME SLIDES */
+        .slide-dark { color: white !important; }
+        .slide-dark h2, .slide-dark h3 { color: white !important; }
+
+        /* RESPONSIVIDAD */
+        @media (max-width: 900px) {
+            .menu-grid, .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 20px; }
+            .hero-title { font-size: 3rem; }
+            .sub-hero { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar" id="progress"></div>
+    <img src="https://vinculacion.ecotec.edu.ec/wp-content/uploads/2022/10/ecotec-site-icon-1.webp" class="logo-ecotec" alt="Logo Universidad Ecotec">
+
+    <!-- CONTROLES FLOTANTES UNIFICADOS -->
+    <div class="nav-buttons">
+        <button class="btn-nav btn-home" onclick="showModule('menuView')" title="Volver al Menú Principal"><i class="fas fa-home"></i></button>
+        <button class="btn-nav" onclick="moveSlide(-1)" title="Subir / Anterior"><i class="fas fa-chevron-up"></i></button>
+        <button class="btn-nav" onclick="moveSlide(1)" title="Bajar / Siguiente"><i class="fas fa-chevron-down"></i></button>
+    </div>
+
+    <!-- ==========================================
+         VISTA 1: MENÚ DE NAVEGACIÓN Y CAPÍTULO 5
+         ========================================== -->
+    <div id="menuView" class="app-view active-view">
+        <div class="slide-container">
+            <!-- SLIDE 1: PORTADA PRINCIPAL -->
+            <section class="slide" style="background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=80')">
+                <div class="slide-content">
+                    <div class="animate">
+                        <span class="badge-chapter">CAPÍTULO 5</span>
+                        <p style="color: var(--azul-acento); font-weight: bold; letter-spacing: 3px; margin-bottom: 12px;">MÓDULO DE FORMACIÓN PROFESIONAL</p>
+                        <h1 class="hero-title">GESTIÓN LOGÍSTICA Y<br><strong>CADENA DE SUMINISTRO</strong></h1>
+                        <p class="sub-hero">Estrategias operativas, optimización de recursos y aplicación práctica con Inteligencia Artificial para emprendedores.</p>
+                        
+                        <div style="margin-top: 40px; display: flex; gap: 15px; align-items: center;">
+                            <button onclick="moveSlide(1)" class="btn-nav" style="width: auto; border-radius: 30px; padding: 0 25px; gap: 10px;">
+                                <span>Explorar Contenido del Módulo</span>
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 2: MENÚ DE SELECCIÓN -->
+            <section class="slide" style="background-image: url('https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1600&q=80')">
+                <div class="slide-content">
+                    <div class="animate" style="text-align: center; margin-bottom: 20px;">
+                        <span class="badge-chapter" style="background: var(--azul-acento);">SELECCIÓN DE APRENDIZAJE</span>
+                        <h2 style="font-size: 2.8rem; color: var(--azul-principal);">¿Qué recurso deseas consultar?</h2>
+                        <p style="font-size: 1.2rem; color: var(--gris-texto);">Elige entre la presentación de conceptos teóricos o el taller práctico interactivo.</p>
+                    </div>
+
+                    <div class="menu-grid animate delay-1">
+                        <!-- OPCIÓN 1: PRESENTACIÓN TEÓRICA -->
+                        <div onclick="showModule('teoriaView')" class="interactive-card">
+                            <div>
+                                <div class="card-icon-wrapper">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                </div>
+                                <h3 class="card-title">Módulo Teórico</h3>
+                                <p class="card-description">
+                                    Diapositivas explicativas con conceptos clave de inventarios, almacenamiento ABC, negociación de compras y prompts de IA.
+                                </p>
+                            </div>
+                            <div class="card-btn-action">
+                                <span>Ingresar a Diapositivas</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+
+                        <!-- OPCIÓN 2: TALLER PRÁCTICO Y EJERCICIOS -->
+                        <div onclick="showModule('tallerView')" class="interactive-card">
+                            <div>
+                                <div class="card-icon-wrapper" style="background: #e8f8f5;">
+                                    <i class="fas fa-calculator" style="color: var(--verde-exito);"></i>
+                                </div>
+                                <h3 class="card-title" style="color: #1b4d3e;">Taller de Ejercicios</h3>
+                                <p class="card-description">
+                                    Simuladores interactivos, cálculo de Stock Mínimo, método FIFO, matrices de proveedores y laboratorio de prompts.
+                                </p>
+                            </div>
+                            <div class="card-btn-action" style="color: var(--verde-exito);">
+                                <span>Ir al Taller Práctico</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         VISTA 2: PRESENTACIÓN TEÓRICA (HTML 1)
+         ========================================== -->
+    <div id="teoriaView" class="app-view">
+        <div class="slide-container">
+            
+            <!-- TEORÍA - SLIDE 1 -->
+            <section class="slide" style="background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=80')">
+                <div class="slide-content">
+                    <div class="animate">
+                        <p style="color: var(--azul-acento); font-weight: bold; letter-spacing: 3px; margin-bottom: 10px;">VINCULACIÓN CON LA COMUNIDAD</p>
+                        <h1 class="hero-title">LOGÍSTICA PARA<br><strong>EMPRENDEDORES</strong></h1>
+                        <p class="sub-hero">Módulo de formación integral con IA aplicada</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 2 -->
+            <section class="slide">
+                <div class="slide-content">
+                    <h2 class="animate" style="color: var(--azul-principal); font-size: 2.5rem; margin-bottom: 40px;">Objetivo del Módulo</h2>
+                    <div class="grid-3">
+                        <div class="card-info animate delay-1">
+                            <i class="fas fa-bullseye"></i>
+                            <h3>General</h3>
+                            <p>Fortalecer capacidades logísticas para optimizar inventarios, compras y distribución de forma eficiente.</p>
+                        </div>
+                        <div class="card-info animate delay-2">
+                            <i class="fas fa-chart-pie"></i>
+                            <h3>Específico 1</h3>
+                            <p>Aplicar herramientas de control de inventario y almacenamiento con tecnología moderna.</p>
+                        </div>
+                        <div class="card-info animate delay-2" style="transition-delay: 0.7s;">
+                            <i class="fas fa-truck-loading"></i>
+                            <h3>Específico 2</h3>
+                            <p>Gestionar proveedores y entregas bajo criterios de éxito y satisfacción del cliente.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 3 -->
+            <section class="slide" style="background-image: url('https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1000&q=80')">
+                <div class="slide-content grid-2">
+                    <div class="animate">
+                        <span class="badge-number">01</span>
+                        <h2 style="font-size: 3rem; color: var(--azul-principal);">Introducción a la Logística</h2>
+                        <p style="font-size: 1.2rem; margin-top: 20px;">No es solo mover cajas; es la gestión estratégica del flujo de bienes, servicios e información.</p>
+                    </div>
+                    <div class="card-info animate delay-1">
+                        <h4 style="margin-bottom: 15px;"><i class="fas fa-check-double" style="font-size: 1.2rem;"></i> Áreas Clave:</h4>
+                        <ul style="list-style: none; line-height: 2;">
+                            <li><i class="fas fa-arrow-right" style="color: var(--azul-acento)"></i> Gestión de Stock</li>
+                            <li><i class="fas fa-arrow-right" style="color: var(--azul-acento)"></i> Almacenamiento Inteligente</li>
+                            <li><i class="fas fa-arrow-right" style="color: var(--azul-acento)"></i> Compras y Negociación</li>
+                            <li><i class="fas fa-arrow-right" style="color: var(--azul-acento)"></i> Transporte Last-Mile</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 4 -->
+            <section class="slide slide-dark" style="background-image: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1000&q=80')">
+                <div class="slide-content">
+                    <div class="animate">
+                        <h2 style="color: #f39c12 !important; letter-spacing: 2px;">CASO PRÁCTICO: PANADERÍA</h2>
+                        <div style="background: rgba(255,255,255,0.1); padding: 40px; border-radius: 20px; margin-top: 30px; border-left: 10px solid #f39c12;">
+                            <h3 style="font-size: 2rem;">Desafío: Productos Perecederos</h3>
+                            <p style="font-size: 1.3rem; margin-top: 15px;">La panadería artesanal evitó un 30% de mermas aplicando el sistema <strong>FIFO (First In, First Out)</strong>. Al priorizar la salida de insumos antiguos, se garantiza frescura y se reducen costos operativos diarios significativamente.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 5 -->
+            <section class="slide">
+                <div class="slide-content">
+                    <h2 class="animate" style="color: var(--azul-principal); margin-bottom: 30px;">Gestión de Inventarios</h2>
+                    <div class="grid-2">
+                        <div class="animate delay-1">
+                            <img src="https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=600&q=80" alt="Gestión de Inventarios" style="width: 100%; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2);">
+                        </div>
+                        <div class="animate delay-2">
+                            <div class="card-info" style="background: var(--fondo-cajas);">
+                                <h4 style="color: var(--azul-principal); margin-bottom: 10px;">Fórmula de Stock Mínimo</h4>
+                                <p style="font-size: 1.4rem; font-weight: bold; color: var(--negro-titulos); text-align: center; padding: 20px 0;">
+                                    (Consumo × Reposición) + Seguridad
+                                </p>
+                                <p style="font-size: 0.9rem;"><em>Ejemplo: (20 unid. x 5 días) + 30 = 130 unidades para evitar quiebres.</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 6 -->
+            <section class="slide">
+                <div class="slide-content">
+                    <h2 class="animate" style="color: var(--azul-principal);"><i class="fas fa-robot"></i> IA en Gestión de Stock</h2>
+                    <div class="grid-3" style="margin-top: 40px;">
+                        <div class="card-info animate delay-1">
+                            <h4>Pronóstico de Demanda</h4>
+                            <p>Analiza ventas históricas para estimar compras.</p>
+                            <div class="box-ia">PROMPT: "Analiza estas ventas de 2024 y sugiere stock para Mayo."</div>
+                        </div>
+                        <div class="card-info animate delay-1" style="transition-delay: 0.5s;">
+                            <h4>Hojas Inteligentes</h4>
+                            <p>Fórmulas de IA en Excel para alertas automáticas.</p>
+                            <div class="box-ia">PROMPT: "Crea fórmula para avisarme si el stock baja de 50."</div>
+                        </div>
+                        <div class="card-info animate delay-1" style="transition-delay: 0.7s;">
+                            <h4>Detección de Patrones</h4>
+                            <p>Identifica productos que no se mueven (obsoletos).</p>
+                            <div class="box-ia">PROMPT: "¿Qué productos llevan más de 60 días sin ventas?"</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 7 -->
+            <section class="slide" style="background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1000&q=80')">
+                <div class="slide-content">
+                    <h2 class="animate" style="color: var(--azul-principal);">Almacenamiento y Organización</h2>
+                    <div class="grid-2" style="margin-top: 30px;">
+                        <div class="card-info animate delay-1" style="border-left: 10px solid var(--azul-principal);">
+                            <h3>Método ABC</h3>
+                            <p><strong>A:</strong> 20% productos = 80% valor (Control estricto).</p>
+                            <p><strong>B:</strong> Valor medio y rotación moderada.</p>
+                            <p><strong>C:</strong> 50% productos = 5% valor (Control básico).</p>
+                        </div>
+                        <div class="animate delay-2">
+                            <div class="card-info">
+                                <h4>Buenas Prácticas:</h4>
+                                <ul style="padding-left: 20px; line-height: 1.8;">
+                                    <li>Distribución según frecuencia de uso.</li>
+                                    <li>Señalética y etiquetas claras.</li>
+                                    <li>Maximizar espacio vertical.</li>
+                                    <li>Pasillos despejados.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 8 -->
+            <section class="slide">
+                <div class="slide-content">
+                    <h2 class="animate" style="color: var(--azul-principal); margin-bottom: 30px;">Compras y Abastecimiento</h2>
+                    <div class="table-container animate delay-1">
+                        <table>
+                            <thead>
+                                <tr><th>Criterio</th><th>Ponderación</th><th>Proveedor A</th><th>Proveedor B</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Precio</td><td>30%</td><td>8/10</td><td>6/10</td></tr>
+                                <tr><td>Calidad</td><td>25%</td><td>9/10</td><td>8/10</td></tr>
+                                <tr><td>Entrega</td><td>20%</td><td>7/10</td><td>9/10</td></tr>
+                                <tr><td>Servicio</td><td>15%</td><td>8/10</td><td>7/10</td></tr>
+                                <tr style="background: var(--fondo-cajas); font-weight: bold; color: var(--azul-principal);">
+                                    <td>TOTAL</td><td>100%</td><td>8.1 (GANADOR)</td><td>7.4</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 9 -->
+            <section class="slide" style="background-image: url('https://images.unsplash.com/photo-1454165833767-027ffea7028c?auto=format&fit=crop&w=1000&q=80')">
+                <div class="slide-content grid-2">
+                    <div class="animate">
+                        <h2 style="color: var(--azul-principal);">Negociación Asistida</h2>
+                        <p style="margin-top: 20px;">La IA permite comparar múltiples cotizaciones en segundos y redactar correos de negociación profesional.</p>
+                        <div class="box-ia" style="margin-top: 30px;">
+                            "Compara estas 3 cotizaciones adjuntas y redacta un correo solicitando un descuento del 10% por pago anticipado."
+                        </div>
+                    </div>
+                    <div class="animate delay-1">
+                        <div class="card-info" style="text-align: center;">
+                            <i class="fas fa-file-invoice-dollar" style="font-size: 4rem;"></i>
+                            <h3>Eficiencia 10x</h3>
+                            <p>Reduce el tiempo de búsqueda de proveedores usando herramientas de scraping y bases de datos con IA.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 10 -->
+            <section class="slide">
+                <div class="slide-content">
+                    <h2 class="animate" style="color: var(--azul-principal); margin-bottom: 40px;">Distribución y Entrega (Last-Mile)</h2>
+                    <div class="grid-3">
+                        <div class="card-info animate delay-1">
+                            <span class="badge-number">1</span>
+                            <h4>Preparación</h4>
+                            <p>Checklist riguroso: Revisión, Embalaje, Documentación y Etiquetado.</p>
+                        </div>
+                        <div class="card-info animate delay-1" style="transition-delay: 0.5s;">
+                            <span class="badge-number">2</span>
+                            <h4>Entrega</h4>
+                            <p>Optimización de rutas para reducir tiempos y consumo de combustible.</p>
+                        </div>
+                        <div class="card-info animate delay-1" style="transition-delay: 0.7s;">
+                            <span class="badge-number">3</span>
+                            <h4>Servicio</h4>
+                            <p>Confirmación de recepción y seguimiento post-venta automatizado.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 11 -->
+            <section class="slide">
+                <div class="slide-content">
+                    <h2 class="animate" style="color: var(--azul-principal); margin-bottom: 30px;">Toolbox IA para el Emprendedor</h2>
+                    <div class="grid-2 animate delay-1">
+                        <div class="card-info" style="border-left: 8px solid #25d366;">
+                            <h4>WhatsApp Business + IA</h4>
+                            <p>Configura chatbots para responder estados de pedidos y tiempos de entrega 24/7.</p>
+                        </div>
+                        <div class="card-info" style="border-left: 8px solid #4285f4;">
+                            <h4>Google Maps + IA</h4>
+                            <p>Usa la optimización de rutas para organizar múltiples entregas en el menor tiempo.</p>
+                        </div>
+                    </div>
+                    <div class="card-info animate delay-2" style="margin-top: 20px; border-left: 8px solid #ff9900;">
+                        <h4>Zoho Inventory / Odoo</h4>
+                        <p>Sistemas que automatizan la clasificación ABC y envían alertas de stock bajo sin intervención humana.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEORÍA - SLIDE 12 -->
+            <section class="slide slide-dark" style="text-align: center; background-image: url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=80')">
+                <div class="slide-content">
+                    <div class="animate">
+                        <h1 style="font-size: 6rem; font-weight: 900;">¡GRACIAS!</h1>
+                        <p style="font-size: 1.5rem; margin-top: 20px; letter-spacing: 5px;">LOGÍSTICA EFICIENTE = NEGOCIO RENTABLE</p>
+                        <div style="margin-top: 40px;">
+                            <button onclick="showModule('tallerView')" class="btn-nav" style="width: auto; border-radius: 30px; padding: 0 30px; margin: 0 auto; height: 50px; background: var(--verde-exito);">
+                                <span>Ir Ahora al Taller Práctico</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         VISTA 3: TALLER DE EJERCICIOS (HTML 3)
+         ========================================== -->
+    <div id="tallerView" class="app-view">
+        <div class="slide-container">
+            
+            <!-- TALLER - SLIDE 1 -->
+            <section class="slide" style="background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=80')">
+                <div class="slide-content">
+                    <div class="animate">
+                        <p style="color: var(--azul-acento); font-weight: bold; letter-spacing: 3px; margin-bottom: 10px;">VINCULACIÓN CON LA COMUNIDAD</p>
+                        <h1 class="hero-title">TALLER DE EJERCICIOS<br><strong>LOGÍSTICA Y CONTROL</strong></h1>
+                        <p class="sub-hero">Casos prácticos, cálculos interactivos y laboratorios de IA</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TALLER - SLIDE 2: CALCULADORA DINÁMICA -->
+            <section class="slide">
+                <div class="slide-content">
+                    <span class="badge-tag"><i class="fas fa-calculator"></i> EJERCICIO PRÁCTICO 1</span>
+                    <h2 class="animate" style="color: var(--azul-principal); font-size: 2.2rem; margin-bottom: 15px;">Cálculo de Stock Mínimo y Punto de Reorden</h2>
+                    
+                    <div class="grid-2">
+                        <div class="card-info animate delay-1">
+                            <h3 style="color: var(--azul-principal); margin-bottom: 10px;"><i class="fas fa-store"></i> Caso: Minimarket "El Sol"</h3>
+                            <p style="font-size: 0.95rem; line-height: 1.5;">Un negocio vende en promedio <strong>25 fundas de café diario</strong>. El proveedor tarda <strong>4 días</strong> en entregar un nuevo pedido. Para evitar quedarse desabastecido por imprevistos, el dueño mantiene un <strong>Stock de Seguridad de 30 fundas</strong>.</p>
+                            
+                            <div style="margin-top: 15px; padding: 12px; background: var(--fondo-cajas); border-radius: 10px;">
+                                <strong>Fórmula:</strong><br>
+                                <code>Punto de Reorden = (Consumo Diario × Tiempo Reposición) + Stock Seguridad</code>
+                            </div>
+                        </div>
+
+                        <div class="exercise-box animate delay-2">
+                            <h4 style="color: var(--azul-principal); margin-bottom: 12px;"><i class="fas fa-sliders-h"></i> Simulador Interactivo</h4>
+                            <div class="input-group">
+                                <label>Consumo Diario (unidades):</label>
+                                <input type="number" id="ex1-consumo" class="input-control" value="25">
+                            </div>
+                            <div class="input-group">
+                                <label>Tiempo de Reposición (días):</label>
+                                <input type="number" id="ex1-dias" class="input-control" value="4">
+                            </div>
+                            <div class="input-group">
+                                <label>Stock de Seguridad (unidades):</label>
+                                <input type="number" id="ex1-seguridad" class="input-control" value="30">
+                            </div>
+                            <button class="btn-calc" onclick="calcularStock()">Calcular Punto de Reorden</button>
+
+                            <div id="ex1-resultado" class="result-box">
+                                <i class="fas fa-check-circle"></i> Debe realizar el pedido cuando su inventario baje a <span id="ex1-val">130</span> unidades.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TALLER - SLIDE 3 -->
+            <section class="slide" style="background-image: url('https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1000&q=80')">
+                <div class="slide-content">
+                    <span class="badge-tag"><i class="fas fa-boxes"></i> EJERCICIO PRÁCTICO 2</span>
+                    <h2 class="animate" style="color: var(--azul-principal); margin-bottom: 20px;">Clasificación de Inventario ABC</h2>
+                    
+                    <div class="table-container animate delay-1">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Demanda Anual</th>
+                                    <th>Costo Unitario</th>
+                                    <th>Valor Total Anual</th>
+                                    <th>% Valor</th>
+                                    <th>Clasificación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: #e8f4f8;">
+                                    <td><strong>Laptops i7 (Prod A)</strong></td>
+                                    <td>20 unidades</td>
+                                    <td>$900</td>
+                                    <td>$18,000</td>
+                                    <td>72%</td>
+                                    <td><span style="background:#e74c3c; color:white; padding:3px 8px; border-radius:10px; font-weight:bold;">CLASE A</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Monitores 24" (Prod B)</strong></td>
+                                    <td>30 unidades</td>
+                                    <td>$150</td>
+                                    <td>$4,500</td>
+                                    <td>18%</td>
+                                    <td><span style="background:#f39c12; color:white; padding:3px 8px; border-radius:10px; font-weight:bold;">CLASE B</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Teclados USB (Prod C)</strong></td>
+                                    <td>100 unidades</td>
+                                    <td>$15</td>
+                                    <td>$1,500</td>
+                                    <td>6%</td>
+                                    <td><span style="background:#27ae60; color:white; padding:3px 8px; border-radius:10px; font-weight:bold;">CLASE C</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mouse Pads (Prod D)</strong></td>
+                                    <td>200 unidades</td>
+                                    <td>$5</td>
+                                    <td>$1,000</td>
+                                    <td>4%</td>
+                                    <td><span style="background:#27ae60; color:white; padding:3px 8px; border-radius:10px; font-weight:bold;">CLASE C</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-info animate delay-2" style="margin-top: 20px;">
+                        <p><strong><i class="fas fa-lightbulb" style="color: #f1c40f;"></i> Decisión Estratégica:</strong> Concentrar la seguridad física y los conteos semanales en el <strong>Prod A (Laptops)</strong> ya que representa el 72% de la inversión total, mientras que los Mouse Pads requieren control mensual mínimo.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TALLER - SLIDE 4 -->
+            <section class="slide slide-dark" style="background-image: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1000&q=80')">
+                <div class="slide-content">
+                    <span class="badge-tag"><i class="fas fa-bread-slice"></i> EJERCICIO PRÁCTICO 3</span>
+                    <h2 style="color: #f39c12 !important; font-size: 2.2rem;">Gestión FIFO (First In, First Out)</h2>
+                    
+                    <div class="grid-2" style="margin-top: 20px;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; border-left: 6px solid #f39c12;">
+                            <h3 style="margin-bottom: 15px;">Registro de Entradas de Harina</h3>
+                            <p style="margin-bottom: 8px;">• <strong>Lote 1 (01 de Mayo):</strong> 50 sacos - Vence 15 Mayo</p>
+                            <p style="margin-bottom: 8px;">• <strong>Lote 2 (05 de Mayo):</strong> 40 sacos - Vence 25 Mayo</p>
+                            <p style="margin-bottom: 8px;">• <strong>Lote 3 (10 de Mayo):</strong> 60 sacos - Vence 05 Junio</p>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.15); padding: 25px; border-radius: 15px;">
+                            <h3>Desafío de Despacho:</h3>
+                            <p style="margin-top: 10px; font-size: 1.1rem;">Llega un pedido de la producción para utilizar <strong>70 sacos de harina</strong> el día 12 de Mayo.</p>
+                            
+                            <div style="margin-top: 20px; padding: 15px; background: rgba(0,255,170,0.2); border-radius: 10px; border: 1px solid #00ffaa;">
+                                <strong>Solución FIFO Correcta:</strong><br>
+                                1. Despachar <strong>50 sacos del Lote 1</strong> (Se agota el lote más antiguo).<br>
+                                2. Despachar <strong>20 sacos del Lote 2</strong>.<br>
+                                <em>Resultado: 0% pérdidas por vencimiento.</em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TALLER - SLIDE 5 -->
+            <section class="slide">
+                <div class="slide-content">
+                    <span class="badge-tag"><i class="fas fa-handshake"></i> EJERCICIO PRÁCTICO 4</span>
+                    <h2 class="animate" style="color: var(--azul-principal); margin-bottom: 20px;">Selección Ponderada de Proveedores</h2>
+                    
+                    <div class="grid-2">
+                        <div class="table-container animate delay-1">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Criterio</th>
+                                        <th>Peso</th>
+                                        <th>Prov. X</th>
+                                        <th>Prov. Y</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Precio</td>
+                                        <td>40%</td>
+                                        <td>7 / 10</td>
+                                        <td>9 / 10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tiempo Entrega</td>
+                                        <td>30%</td>
+                                        <td>9 / 10</td>
+                                        <td>6 / 10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Garantía / Calidad</td>
+                                        <td>30%</td>
+                                        <td>8 / 10</td>
+                                        <td>7 / 10</td>
+                                    </tr>
+                                    <tr style="background: var(--fondo-cajas); font-weight: bold;">
+                                        <td>Puntaje Ponderado</td>
+                                        <td>100%</td>
+                                        <td style="color: var(--azul-principal);">7.9</td>
+                                        <td style="color: var(--azul-principal);">7.5</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="card-info animate delay-2">
+                            <h4 style="color: var(--azul-principal); margin-bottom: 12px;"><i class="fas fa-chart-line"></i> Análisis del Resultado</h4>
+                            <p style="font-size: 0.95rem; line-height: 1.6;">A pesar de que el <strong>Proveedor Y</strong> ofrece un mejor precio (9/10), el <strong>Proveedor X resulta ganador con 7.9 pts</strong> gracias a sus mejores tiempos de entrega y garantía de calidad.</p>
+                            <p style="margin-top: 10px; font-size: 0.85rem; color: #666;"><em>Nota: Un retraso en la entrega puede costar más que un pequeño ahorro inicial en precio.</em></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TALLER - SLIDE 6 -->
+            <section class="slide" style="background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1000&q=80')">
+                <div class="slide-content">
+                    <span class="badge-tag"><i class="fas fa-truck-moving"></i> EJERCICIO PRÁCTICO 5</span>
+                    <h2 class="animate" style="color: var(--azul-principal); margin-bottom: 20px;">Optimización de Entregas Last-Mile</h2>
+                    
+                    <div class="grid-3 animate delay-1">
+                        <div class="card-info">
+                            <div class="badge-number">A</div>
+                            <h4>Ruta A: Sin Planificar</h4>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Entregas en orden de llegada de pedidos.</p>
+                            <p style="margin-top: 8px;">• Kilómetros: 45 km</p>
+                            <p>• Tiempo: 3.5 horas</p>
+                            <p>• Combustible: $12</p>
+                        </div>
+
+                        <div class="card-info" style="border-bottom-color: var(--verde-exito);">
+                            <div class="badge-number" style="background: var(--verde-exito);">B</div>
+                            <h4>Ruta B: Con Agrupación</h4>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Agrupación por sectores urbanos cercas.</p>
+                            <p style="margin-top: 8px;">• Kilómetros: 28 km</p>
+                            <p>• Tiempo: 2.1 horas</p>
+                            <p>• Combustible: $7.50</p>
+                        </div>
+
+                        <div class="card-info" style="background: var(--fondo-cajas);">
+                            <h4><i class="fas fa-piggy-bank" style="color: var(--azul-principal);"></i> Ahorro Mensual</h4>
+                            <p style="font-size: 1.8rem; font-weight: bold; color: var(--azul-principal); margin: 15px 0;">37.7%</p>
+                            <p style="font-size: 0.85rem;">Reducción directa de costos de envío y mejora en la calificación del cliente por entregas rápidas.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TALLER - SLIDE 7 -->
+            <section class="slide">
+                <div class="slide-content">
+                    <span class="badge-tag"><i class="fas fa-robot"></i> EJERCICIO PRÁCTICO 6</span>
+                    <h2 class="animate" style="color: var(--azul-principal); margin-bottom: 20px;">Laboratorio Práctico de Prompts con IA</h2>
+                    
+                    <div class="grid-2">
+                        <div class="card-info animate delay-1">
+                            <h4><i class="fas fa-terminal"></i> Reto: Generación de Plantilla de Pedido</h4>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Copia este prompt en ChatGPT o Gemini para automatizar tus compras:</p>
+                            <div class="box-ia">
+                                "Actúa como un Gerente de Logística Experto. Redacta un correo profesional para mi proveedor solicitando cotización de 100 unidades de materia prima X, incluyendo cláusula de entrega en máximo 5 días hábiles y descuento por pago a 30 días."
+                            </div>
+                        </div>
+
+                        <div class="card-info animate delay-2">
+                            <h4><i class="fas fa-magic"></i> Reto: Análisis de Rotación de Inventario</h4>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Prompt para detectar productos lentos u obsoletos:</p>
+                            <div class="box-ia" style="border-left-color: #f39c12;">
+                                "Tengo la siguiente lista de productos con su fecha de ingreso y unidades vendidas este mes: [Copiar Datos Excel]. Identifica los 3 productos con peor rotación y sugiere una estrategia de remate o combo para recuperar liquidez."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TALLER - SLIDE 8 -->
+            <section class="slide slide-dark" style="text-align: center; background-image: url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=80')">
+                <div class="slide-content">
+                    <div class="animate">
+                        <h1 style="font-size: 5rem; font-weight: 900;">¡FIN DEL TALLER!</h1>
+                        <p style="font-size: 1.5rem; margin-top: 20px; letter-spacing: 3px;">APLICA ESTOS EJERCICIOS EN TU EMPRENDIMIENTO</p>
+                        
+                        <div style="margin-top: 40px; display: inline-block; background: rgba(255,255,255,0.15); padding: 25px 40px; border-radius: 20px;">
+                            <h3 style="color: #00ffaa !important; margin-bottom: 10px;"><i class="fas fa-check-double"></i> Check-list Completado:</h3>
+                            <p>✓ Fórmula de Stock Mínimo | ✓ Clasificación ABC | ✓ Método FIFO | ✓ Matriz Proveedores</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- FOOTER ECOTEC -->
+    <div class="footer-ecotec">
+        <i class="fab fa-facebook-f"></i> @universidadecotec | <i class="fab fa-instagram"></i> uecotec
+    </div>
+
+    <!-- CONTROLADOR JAVASCRIPT GLOBAL (SPA & NAVEGACIÓN) -->
+    <script>
+        let currentViewId = 'menuView';
+        let currentSlideIndex = 0;
+        let isScrolling = false;
+
+        // Cambiar entre Vistas (Menú / Teoría / Taller)
+        function showModule(viewId) {
+            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active-view'));
+            
+            const activeView = document.getElementById(viewId);
+            activeView.classList.add('active-view');
+            
+            currentViewId = viewId;
+            currentSlideIndex = 0;
+            
+            updateSlides();
+        }
+
+        // Obtener elementos activos según la vista actual
+        function getActiveElements() {
+            const activeView = document.getElementById(currentViewId);
+            const slider = activeView.querySelector('.slide-container');
+            const slides = activeView.querySelectorAll('.slide');
+            return { slider, slides };
+        }
+
+        // Actualizar desplazamiento e indicadores
+        function updateSlides() {
+            const { slider, slides } = getActiveElements();
+            const progress = document.getElementById('progress');
+
+            if (!slider || slides.length === 0) return;
+
+            slider.style.transform = `translateY(-${currentSlideIndex * 100}vh)`;
+            
+            slides.forEach((s, i) => {
+                if (i === currentSlideIndex) s.classList.add('active');
+                else s.classList.remove('active');
+            });
+
+            progress.style.width = `${((currentSlideIndex + 1) / slides.length) * 100}%`;
+        }
+
+        // Mover diapositivas (Arriba / Abajo)
+        function moveSlide(dir) {
+            const { slides } = getActiveElements();
+            
+            currentSlideIndex += dir;
+            if (currentSlideIndex < 0) currentSlideIndex = 0;
+            if (currentSlideIndex >= slides.length) currentSlideIndex = slides.length - 1;
+            
+            updateSlides();
+        }
+
+        // Teclado (Flechas Arriba/Abajo)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowDown" || e.key === "PageDown") moveSlide(1);
+            if (e.key === "ArrowUp" || e.key === "PageUp") moveSlide(-1);
+        });
+
+        // Mouse Wheel / Touchpad
+        document.addEventListener('wheel', (e) => {
+            if (isScrolling) return;
+            if (Math.abs(e.deltaY) > 20) {
+                isScrolling = true;
+                if (e.deltaY > 0) moveSlide(1);
+                else moveSlide(-1);
+                setTimeout(() => { isScrolling = false; }, 800);
+            }
+        }, { passive: true });
+
+        // LÓGICA DE EJERCICIO 1: CALCULADORA DE STOCK MÍNIMO
+        function calcularStock() {
+            const consumo = parseFloat(document.getElementById('ex1-consumo').value) || 0;
+            const dias = parseFloat(document.getElementById('ex1-dias').value) || 0;
+            const seguridad = parseFloat(document.getElementById('ex1-seguridad').value) || 0;
+
+            const puntoReorden = (consumo * dias) + seguridad;
+            
+            document.getElementById('ex1-val').textContent = puntoReorden;
+            document.getElementById('ex1-resultado').style.display = 'block';
+        }
+
+        // Inicialización
+        updateSlides();
+    </script>
+</body>
+</html>
