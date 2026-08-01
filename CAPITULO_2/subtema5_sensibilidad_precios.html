@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subtema 5: Sensibilidad de Precios y Viabilidad Financiera - ECOTEC</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        :root {
+            --primary: #1E5FA6;
+            --primary-dark: #122E7A;
+            --accent: #2D6DB5;
+            --text-main: #1A1A1A;
+            --text-muted: #444444;
+            --bg-light: #F5F6FA;
+            --bg-card: #EBF3FC;
+            --white: #FFFFFF;
+            --success: #1E7A4C;
+            --danger: #C0392B;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--white);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Style */
+        .header {
+            background-color: var(--white);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 15px 4%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .header .brand-text {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .header .session-badge {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        main {
+            margin-top: 75px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F5F6FA 100%);
+            padding: 80px 4% 60px 4%;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background-color: var(--bg-card);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--text-main);
+            font-weight: 700;
+            max-width: 800px;
+            margin: 0 auto 15px auto;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+        }
+
+        /* Section Global Settings */
+        .section-container {
+            padding: 80px 4%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title-block {
+            margin-bottom: 45px;
+        }
+
+        .section-title-block h2 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            position: relative;
+            padding-left: 15px;
+            font-weight: 700;
+        }
+
+        .section-title-block h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15%;
+            height: 70%;
+            width: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        .bg-grey-sec {
+            background-color: var(--bg-light);
+        }
+
+        .intro-box {
+            background-color: var(--bg-card);
+            border-left: 4px solid var(--primary);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 35px;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+        }
+
+        /* Termómetro de Elasticidad (Sección A) */
+        .elasticity-container {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 850px) {
+            .elasticity-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .thermometer-wrapper {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .thermometer-bar {
+            height: 20px;
+            background: linear-gradient(to right, #94A3B8 0%, var(--primary) 50%, #E74C3C 100%);
+            border-radius: 10px;
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .thermometer-pointer {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            width: 12px;
+            height: 36px;
+            background: var(--text-main);
+            border-radius: 6px;
+            transform: translateX(-50%);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: left 0.5s ease;
+        }
+
+        .thermometer-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .elasticity-desc-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.02);
+            margin-top: 15px;
+        }
+
+        /* Componentes de Gráficos (Sección B y C) */
+        .chart-layout-two {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 850px) {
+            .chart-layout-two {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-wrapper-box {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            width: 100%;
+        }
+
+        /* Diagrama de pasos (Sección C) */
+        .diagram-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .diagram-step {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.06);
+            padding: 15px 20px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            position: relative;
+        }
+
+        .diagram-step h4 {
+            font-size: 0.95rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .diagram-step p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .diagram-arrow {
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .diagram-container {
+                flex-direction: column;
+            }
+            .diagram-arrow {
+                transform: rotate(90deg);
+                margin: 5px 0;
+            }
+        }
+
+        /* KPI Panel Dashboard */
+        .dashboard-kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .db-kpi-card {
+            background: var(--white);
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: var(--transition);
+        }
+
+        .db-kpi-card.status-viable {
+            border-left: 5px solid var(--success);
+        }
+
+        .db-kpi-card.status-inviable {
+            border-left: 5px solid var(--danger);
+        }
+
+        .kpi-icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-viable .kpi-icon-circle {
+            background-color: rgba(30, 122, 76, 0.1);
+            color: var(--success);
+        }
+
+        .status-inviable .kpi-icon-circle {
+            background-color: rgba(192, 57, 43, 0.1);
+            color: var(--danger);
+        }
+
+        .kpi-db-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .status-viable .kpi-db-val { color: var(--success); }
+        .status-inviable .kpi-db-val { color: var(--danger); }
+
+        .badge-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-viable .badge-status {
+            background-color: rgba(30, 122, 76, 0.15);
+            color: var(--success);
+        }
+
+        .status-inviable .badge-status {
+            background-color: rgba(192, 57, 43, 0.15);
+            color: var(--danger);
+        }
+
+        /* Sección D: Simulador General */
+        .simulator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 950px) {
+            .simulator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sim-inputs-box {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.06);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.02);
+        }
+
+        .sim-inputs-box h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--bg-light);
+            padding-bottom: 10px;
+        }
+
+        .form-row-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.88rem;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 95, 166, 0.15);
+        }
+
+        .sim-btn-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .action-btn {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-reset {
+            background-color: var(--bg-light);
+            color: var(--text-muted);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .btn-reset:hover {
+            background-color: #E2E8F0;
+        }
+
+        /* Tabla y Tarjetas de Resultados Simulados */
+        .results-wrapper-box {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+        }
+
+        .sim-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .sim-table th, .sim-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--bg-light);
+        }
+
+        .sim-table th {
+            background-color: var(--primary);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .sim-table tr.winner-row {
+            background-color: rgba(30, 122, 76, 0.04);
+            font-weight: 500;
+        }
+
+        .sim-table tr.winner-row td {
+            border-top: 2px solid var(--success);
+            border-bottom: 2px solid var(--success);
+        }
+
+        .text-success { color: var(--success); font-weight: 600; }
+        .text-danger { color: var(--danger); font-weight: 600; }
+
+        @media (max-width: 600px) {
+            /* Transformación de tabla a bloques apilados para móviles */
+            .table-responsive {
+                border: none;
+                box-shadow: none;
+            }
+            .sim-table, .sim-table tbody, .sim-table tr, .sim-table td {
+                display: block;
+                width: 100%;
+            }
+            .sim-table th {
+                display: none;
+            }
+            .sim-table tr {
+                background: var(--white);
+                border: 1px solid rgba(0,0,0,0.08);
+                border-radius: 12px;
+                margin-bottom: 15px;
+                padding: 15px;
+            }
+            .sim-table td {
+                text-align: right;
+                padding: 8px 0;
+                border-bottom: 1px dashed var(--bg-light);
+            }
+            .sim-table td::before {
+                content: attr(data-label);
+                float: left;
+                font-weight: 600;
+                color: var(--text-muted);
+            }
+            .sim-table tr.winner-row {
+                border: 2px solid var(--success);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--white);
+            border-top: 3px solid var(--accent);
+            padding: 30px 4%;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .footer-socials span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.215, 0.610, 0.355, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER INSTITUCIONAL -->
+    <header class="header">
+        <div class="logo-container">
+            <span class="brand-text">Universidad <span style="color: var(--primary);">Ecotec</span></span>
+        </div>
+        <div class="session-badge">Sesión S5.1</div>
+    </header>
+
+    <main>
+        <!-- SECCIÓN HERO -->
+        <section class="hero">
+            <div class="hero-badge">Unidad 3: Viabilidad Financiera</div>
+            <h1>Sensibilidad de Precios y Viabilidad Financiera</h1>
+            <p>Descubre cómo la elección del precio de venta define de forma absoluta el éxito, sostenibilidad o quiebre latente de tu proyecto antes del lanzamiento.</p>
+        </section>
+
+        <!-- SECCIÓN A: ELASTICIDAD PRECIO-DEMANDA -->
+        <section class="section-container reveal">
+            <div class="section-title-block">
+                <h2>¿Qué es la Elasticidad Precio-Demanda y por qué importa?</h2>
+            </div>
+            
+            <div class="intro-box">
+                La <strong>sensibilidad al precio</strong> mide el impacto real que las alteraciones en el valor de venta de tu producto o servicio causan directamente en las intenciones de compra del mercado. Financieramente, esto se expresa a través del coeficiente de elasticidad precio de la demanda.
+            </div>
+
+            <div class="elasticity-container">
+                <div>
+                    <p style="margin-bottom: 15px; color: var(--text-muted);">
+                        Imagínate el caso cotidiano de las estaciones de servicio: si una gasolinera eleva el costo por galón solo un par de centavos, una gran parte de los conductores preferirá avanzar a la siguiente estación competidora si esta se encuentra cerca. Esto describe un comportamiento de <strong>Mercado Altamente Elástico</strong>.
+                    </p>
+                    <p style="color: var(--text-muted);">
+                        Definir precios a ciegas o ignorando este análisis puede liquidar el margen operativo y destruir el VAN (Valor Actual Neto) de una propuesta que en proyecciones teóricas estáticas lucía rentable.
+                    </p>
+                </div>
+                
+                <!-- Componente visual Termómetro -->
+                <div class="thermometer-wrapper">
+                    <h4 style="font-size: 1rem; margin-bottom: 5px; text-align: center;">Termómetro de Sensibilidad al Precio</h4>
+                    <div class="thermometer-bar">
+                        <div class="thermometer-pointer" id="thermometerPointer"></div>
+                    </div>
+                    <div class="thermometer-labels">
+                        <span style="cursor:pointer;" onclick="moveThermometer(5, 'Inelástica (Medicamentos, Servicios Básicos)')">Inelástica</span>
+                        <span style="cursor:pointer;" onclick="moveThermometer(50, 'Elasticidad Unitaria (Equilibrio Proporcional)')">Unitaria</span>
+                        <span style="cursor:pointer;" onclick="moveThermometer(95, 'Altamente Elástica (Gasolina, Snacks, Commodities)')">Elástica</span>
+                    </div>
+                    <div class="elasticity-desc-card" id="thermometerDesc">
+                        <strong>Demanda Intermedia:</strong> Haz clic en los extremos de la barra para evaluar los tipos de sensibilidad del mercado.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN B: MÉTODO VAN WESTENDORP -->
+        <section class="bg-grey-sec">
+            <div class="section-container reveal">
+                <div class="section-title-block">
+                    <h2>Método Van Westendorp: Rango Óptimo de Precio</h2>
+                </div>
+
+                <div class="chart-layout-two">
+                    <div class="chart-wrapper-box" style="height: 380px;">
+                        <canvas id="chartWestendorp"></canvas>
+                    </div>
+                    <div>
+                        <p style="margin-bottom: 15px; color: var(--text-muted);">
+                            Este marco metodológico consulta directamente a un grupo muestra sobre 4 umbrales de percepción de valor:
+                        </p>
+                        <ul style="margin-left: 20px; margin-bottom: 20px; color: var(--text-muted); display: flex; flex-direction: column; gap: 8px;">
+                            <li><strong>Demasiado Barato:</strong> Duda de la calidad del producto.</li>
+                            <li><strong>Barato / Oferta:</strong> Considerado una excelente oportunidad de compra.</li>
+                            <li><strong>Caro:</strong> Costoso pero aún factible de adquirir.</li>
+                            <li><strong>Demasiado Caro:</strong> Inasequible, descarta la compra de inmediato.</li>
+                        </ul>
+                        <div class="intro-box" style="margin-bottom: 0; padding: 15px 20px; font-size: 0.95rem;">
+                            <strong>Aporte de la Inteligencia Artificial:</strong> Los modelos de IA automatizan el diseño del muestreo, tabulan masivamente las respuestas de encuestas y computan regresiones de tipo log-log con el fin de proyectar de forma instantánea el Coeficiente de Elasticidad.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN C: DASHBOARD DE SENSIBILIDAD VAN -->
+        <section class="section-container reveal">
+            <div class="section-title-block">
+                <h2>Dashboard de Viabilidad: Variación de Precios vs VAN</h2>
+            </div>
+
+            <!-- Diagrama de pasos del flujo matemático -->
+            <div class="diagram-container">
+                <div class="diagram-step">
+                    <h4>1. Ingreso Base</h4>
+                    <p>Precio de Venta × Unidades Proyectadas</p>
+                </div>
+                <div class="diagram-arrow"><i data-feather="arrow-right"></i></div>
+                <div class="diagram-step">
+                    <h4>2. Utilidad Operativa</h4>
+                    <p>Ingresos − Costos Totales (Fijos y Variables)</p>
+                </div>
+                <div class="diagram-arrow"><i data-feather="arrow-right"></i></div>
+                <div class="diagram-step">
+                    <h4>3. Flujo Anualizado</h4>
+                    <p>Utilidad Mensual proyectada a 12 meses</p>
+                </div>
+                <div class="diagram-arrow"><i data-feather="arrow-right"></i></div>
+                <div class="diagram-step">
+                    <h4>4. Valor Actual Neto</h4>
+                    <p>Descuento de flujos futuros a valor presente</p>
+                </div>
+            </div>
+
+            <!-- Fichas KPI del Dashboard Base Estático -->
+            <div class="dashboard-kpi-row">
+                <div class="db-kpi-card status-inviable">
+                    <div class="kpi-icon-circle"><i data-feather="alert-triangle"></i></div>
+                    <div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Escenario Precio Bajo ($12)</p>
+                        <div class="kpi-db-val">-$24,500</div>
+                        <span class="badge-status">No Viable</span>
+                    </div>
+                </div>
+                <div class="db-kpi-card status-viable">
+                    <div class="kpi-icon-circle"><i data-feather="check-circle"></i></div>
+                    <div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Escenario Precio Base ($20)</p>
+                        <div class="kpi-db-val">$45,200</div>
+                        <span class="badge-status">Proyecto Viable</span>
+                    </div>
+                </div>
+                <div class="db-kpi-card status-viable">
+                    <div class="kpi-icon-circle"><i data-feather="trending-up"></i></div>
+                    <div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Escenario Precio Alto ($28)</p>
+                        <div class="kpi-db-val">$114,800</div>
+                        <span class="badge-status">Altamente Viable</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-layout-two">
+                <div class="chart-wrapper-box" style="height: 320px;">
+                    <canvas id="chartEscenariosBase"></canvas>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 15px;">Conclusión Financiera Estratégica</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">
+                        Como se evidencia, variaciones de un pequeño porcentaje a la baja en el precio de venta pueden arrastrar el flujo operativo neto por debajo del umbral de rentabilidad exigido por los inversionistas, destruyendo el VAN por completo. Por el contrario, defender un precio óptimo más alto eleva de forma exponencial el margen de contribución.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN D: SIMULADOR DE ESCENARIOS INTERACTIVO -->
+        <section class="bg-grey-sec">
+            <div class="section-container reveal">
+                <div class="section-title-block">
+                    <h2>Simulador Avanzado de Sensibilidad de Precios</h2>
+                </div>
+
+                <div class="simulator-grid">
+                    <!-- Entradas de Variables -->
+                    <div class="sim-inputs-box">
+                        <h3>Variables de Operación</h3>
+                        
+                        <div class="form-group">
+                            <label for="simVolumen">Unidades anuales estimadas de venta</label>
+                            <input type="number" id="simVolumen" value="5000" min="1">
+                        </div>
+                        
+                        <div class="form-row-two">
+                            <div class="form-group">
+                                <label for="simCostVar">Costo Variable Unitario ($)</label>
+                                <input type="number" id="simCostVar" value="8" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="simCostFix">Costos Fijos Anuales ($)</label>
+                                <input type="number" id="simCostFix" value="15000" min="0">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simDescuento">Tasa de Descuento Anual / WACC (%)</label>
+                            <input type="number" id="simDescuento" value="12" min="1" max="100">
+                        </div>
+
+                        <h3 style="margin-top: 25px;">Precios de Venta por Escenario</h3>
+                        <div class="form-row-two">
+                            <div class="form-group">
+                                <label>Bajo ($)</label>
+                                <input type="number" id="pBajo" value="10">
+                            </div>
+                            <div class="form-group">
+                                <label>Base ($)</label>
+                                <input type="number" id="pBase" value="15">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Alto ($)</label>
+                            <input type="number" id="pAlto" value="22">
+                        </div>
+
+                        <div class="sim-btn-group">
+                            <button class="action-btn" onclick="calcularSensibilidad()">
+                                <i data-feather="play"></i> Simular Escenarios
+                            </button>
+                            <button class="action-btn btn-reset" onclick="resetSimulador()">
+                                <i data-feather="refresh-cw"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Cuadro de Resultados de Simulación -->
+                    <div class="results-wrapper-box">
+                        <div class="table-responsive">
+                            <table class="sim-table">
+                                <thead>
+                                    <tr>
+                                        <th>Métrica Financiera</th>
+                                        <th>Escenario Bajo</th>
+                                        <th>Escenario Base</th>
+                                        <th>Escenario Alto</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="rowIngresos">
+                                        <td>Ingresos Totales Anuales</td>
+                                        <td data-label="Escenario Bajo">-</td>
+                                        <td data-label="Escenario Base">-</td>
+                                        <td data-label="Escenario Alto">-</td>
+                                    </tr>
+                                    <tr id="rowUtilidad">
+                                        <td>Utilidad Operativa Anual</td>
+                                        <td data-label="Escenario Bajo">-</td>
+                                        <td data-label="Escenario Base">-</td>
+                                        <td data-label="Escenario Alto">-</td>
+                                    </tr>
+                                    <tr id="rowVAN">
+                                        <td>VAN Estimado (5 años)</td>
+                                        <td data-label="Escenario Bajo">-</td>
+                                        <td data-label="Escenario Base">-</td>
+                                        <td data-label="Escenario Alto">-</td>
+                                    </tr>
+                                    <tr id="rowViabilidad">
+                                        <td>Dictamen de Viabilidad</td>
+                                        <td data-label="Escenario Bajo">-</td>
+                                        <td data-label="Escenario Base">-</td>
+                                        <td data-label="Escenario Alto">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Gráfico de barras interactivo de resultados -->
+                        <div class="chart-wrapper-box" style="height: 280px;">
+                            <canvas id="chartSimResultados"></canvas>
+                        </div>
+
+                        <button class="action-btn" style="background-color: var(--accent);" onclick="copiarResultadosTexto()">
+                            <i data-feather="copy"></i> Copiar Resumen Financiero
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                © 2026 Universidad Ecotec. Todos los derechos reservados. Guía de Modelación y Viabilidad Financiera.
+            </div>
+            <div class="footer-socials">
+                <span><i data-feather="facebook" style="width:16px; height:16px;"></i> @universidadecotec</span>
+                <span><i data-feather="instagram" style="width:16px; height:16px;"></i> uecotec</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Inicialización de Iconos Feather
+        feather.replace();
+
+        // --- ANIMACIONES AL HACER SCROLL ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- LÓGICA SECCIÓN A: TERMÓMETRO ---
+        function moveThermometer(pct, text) {
+            document.getElementById('thermometerPointer').style.left = pct + '%';
+            document.getElementById('thermometerDesc').innerHTML = `<strong>Análisis de Percepción:</strong> ${text}`;
+        }
+
+        // --- GRÁFICO SECCIÓN B: VAN WESTENDORP (SIMULADO) ---
+        const ctxWest = document.getElementById('chartWestendorp').getContext('2d');
+        new Chart(ctxWest, {
+            type: 'line',
+            data: {
+                labels: ['$10', '$15', '$20', '$25', '$30', '$35', '$40'],
+                datasets: [
+                    { label: 'Demasiado Barato', data: [100, 75, 40, 10, 0, 0, 0], borderColor: '#C0392B', tension: 0.2, fill: false },
+                    { label: 'Barato / Oferta', data: [90, 85, 65, 30, 5, 0, 0], borderColor: '#2980B9', tension: 0.2, fill: false },
+                    { label: 'Caro', data: [0, 5, 20, 55, 80, 90, 98], borderColor: '#F39C12', tension: 0.2, fill: false },
+                    { label: 'Demasiado Caro', data: [0, 0, 5, 25, 60, 85, 100], borderColor: '#2C3E50', tension: 0.2, fill: false }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Intersección de Curvas de Sensibilidad (Precio Óptimo Sugerido: $22 - $26)' }
+                }
+            }
+        });
+
+        // --- GRÁFICO SECCIÓN C: COMPARACIÓN BASE ---
+        const ctxEsc = document.getElementById('chartEscenariosBase').getContext('2d');
+        new Chart(ctxEsc, {
+            type: 'bar',
+            data: {
+                labels: ['Precio Bajo ($12)', 'Precio Base ($20)', 'Precio Alto ($28)'],
+                datasets: [
+                    { label: 'Ingresos Anuales ($)', data: [60000, 100000, 140000], backgroundColor: '#2D6DB5' },
+                    { label: 'Valor Actual Neto (VAN) ($)', data: [-24500, 45200, 114800], backgroundColor: ['#C0392B', '#1E7A4C', '#1E5FA6'] }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // --- SECCIÓN D: SIMULADOR INTERACTIVO TOTAL ---
+        let chartSim = null;
+
+        function calcularVAN_5Anios(flujo, tasa) {
+            let van = -flujo; // Asumimos inversión inicial equivalente al flujo operativo de un año para simular modelo base simplificado
+            let r = tasa / 100;
+            for (let i = 1; i <= 5; i++) {
+                van += flujo / Math.pow(1 + r, i);
+            }
+            return van;
+        }
+
+        function calcularSensibilidad() {
+            // Recolección y validación de inputs
+            const unidades = parseFloat(document.getElementById('simVolumen').value);
+            const cVUnit = parseFloat(document.getElementById('simCostVar').value);
+            const cFijos = parseFloat(document.getElementById('simCostFix').value);
+            const tasa = parseFloat(document.getElementById('simDescuento').value);
+
+            const pB = parseFloat(document.getElementById('pBajo').value);
+            const pBase = parseFloat(document.getElementById('pBase').value);
+            const pA = parseFloat(document.getElementById('pAlto').value);
+
+            if (isNaN(unidades) || unidades <= 0 || isNaN(cVUnit) || cVUnit < 0 || isNaN(cFijos) || cFijos < 0 || isNaN(tasa) || tasa <= 0) {
+                alert("Por favor, ingrese valores válidos mayores a cero en los campos de operación.");
+                return;
+            }
+
+            const precios = [pB, pBase, pA];
+            const ingresos = [];
+            const utilidades = [];
+            const vans = [];
+
+            precios.forEach(p => {
+                let ingAnual = p * unidades;
+                let costVarTotal = cVUnit * unidades;
+                let utilAnual = ingAnual - costVarTotal - cFijos;
+                let vanEst = calcularVAN_5Anios(utilAnual, tasa);
+
+                ingresos.push(ingAnual);
+                utilidades.push(utilAnual);
+                vans.push(Math.round(vanEst));
+            });
+
+            // Actualizar tabla en el DOM
+            const celdasIng = document.getElementById('rowIngresos').getElementsByTagName('td');
+            const celdasUtil = document.getElementById('rowUtilidad').getElementsByTagName('td');
+            const celdasVan = document.getElementById('rowVAN').getElementsByTagName('td');
+            const celdasViab = document.getElementById('rowViabilidad').getElementsByTagName('td');
+
+            for (let i = 0; i < 3; i++) {
+                celdasIng[i+1].innerText = `$${ingresos[i].toLocaleString()}`;
+                celdasUtil[i+1].innerText = `$${utilidades[i].toLocaleString()}`;
+                celdasVan[i+1].innerText = `$${vans[i].toLocaleString()}`;
+                
+                if (vans[i] >= 0) {
+                    celdasVan[i+1].className = "text-success";
+                    celdasViab[i+1].innerText = "✓ Viable";
+                    celdasViab[i+1].className = "text-success";
+                } else {
+                    celdasVan[i+1].className = "text-danger";
+                    celdasViab[i+1].innerText = "✕ No Viable";
+                    celdasViab[i+1].className = "text-danger";
+                }
+            }
+
+            // Resaltar el mejor escenario (Mayor VAN)
+            const filas = document.querySelectorAll('.sim-table tbody tr');
+            let maxVanIdx = vans.indexOf(Math.max(...vans));
+            
+            // Renderizar o actualizar gráfico de barras dinámico
+            const ctxSim = document.getElementById('chartSimResultados').getContext('2d');
+            if (chartSim) { chartSim.destroy(); }
+
+            chartSim = new Chart(ctxSim, {
+                type: 'bar',
+                data: {
+                    labels: ['Escenario Bajo', 'Escenario Base', 'Escenario Alto'],
+                    datasets: [
+                        { label: 'Utilidad Operativa ($)', data: utilidades, backgroundColor: '#2D6DB5' },
+                        { label: 'VAN Estimado ($)', data: vans, backgroundColor: vans.map(v => v >= 0 ? '#1E7A4C' : '#C0392B') }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { title: { display: true, text: 'Resultados de Simulación Dinámica' } }
+                }
+            });
+
+            // Guardar string resumido en la tabla para la acción de copiado
+            document.querySelector('.sim-table').setAttribute('data-summary', 
+                `RESUMEN ANÁLISIS DE SENSIBILIDAD:
+` +
+                `Escenario Bajo: VAN = $${vans[0]} (${vans[0] >= 0 ? 'Viable' : 'No Viable'})
+` +
+                `Escenario Base: VAN = $${vans[1]} (${vans[1] >= 0 ? 'Viable' : 'No Viable'})
+` +
+                `Escenario Alto: VAN = $${vans[2]} (${vans[2] >= 0 ? 'Viable' : 'No Viable'})`
+            );
+        }
+
+        function resetSimulador() {
+            document.getElementById('simVolumen').value = 5000;
+            document.getElementById('simCostVar').value = 8;
+            document.getElementById('simCostFix').value = 15000;
+            document.getElementById('simDescuento').value = 12;
+            document.getElementById('pBajo').value = 10;
+            document.getElementById('pBase').value = 15;
+            document.getElementById('pAlto').value = 22;
+            calcularSensibilidad();
+        }
+
+        function copiarResultadosTexto() {
+            const summaryText = document.querySelector('.sim-table').getAttribute('data-summary');
+            if (!summaryText) {
+                alert("Primero realice una simulación presionando el botón 'Simular Escenarios'.");
+                return;
+            }
+            navigator.clipboard.writeText(summaryText).then(() => {
+                alert("¡Resumen financiero copiado exitosamente al portapapeles!");
+            });
+        }
+
+        // Ejecución automática inicial para poblar datos del simulador
+        calcularSensibilidad();
+    </script>
+</body>
+</html>
